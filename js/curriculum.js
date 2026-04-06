@@ -1187,5 +1187,346 @@ fortify-sast:
         ]
       }
     ]
+  },
+  {
+    id: "ai-in-cicd",
+    title: "AI in Software Delivery",
+    icon: "🤖",
+    desc: "How AI is reshaping CI/CD pipelines, quality gates, and TPM decision-making",
+    lessons: [
+      {
+        id: "ai-delivery-pipeline",
+        title: "AI in the Delivery Pipeline",
+        duration: "10 min read",
+        content: `
+<h3>The AI Wave Hitting DevOps</h3>
+<p>AI is rapidly being embedded into every stage of the software delivery lifecycle — from writing code to monitoring production. As a TPM, you don't need to build these tools, but you absolutely need to understand what they do, where they add value, and where they introduce risk.</p>
+
+<h3>Where AI Shows Up in CI/CD</h3>
+<ul>
+  <li><strong>Code Generation</strong> — Tools like GitHub Copilot and Cursor generate code, tests, and documentation from natural language prompts. Developer velocity claims of 20–55% are common, though actual gains vary by task type.</li>
+  <li><strong>AI Code Review</strong> — Tools like CodeRabbit, Qodo (formerly CodiumAI), and Amazon CodeGuru analyze PRs and flag bugs, security issues, and style violations before a human reviewer sees the diff.</li>
+  <li><strong>Intelligent Test Generation</strong> — AI can analyze changed code paths and auto-generate unit tests for uncovered branches, reducing manual test-writing toil.</li>
+  <li><strong>Predictive Pipeline Optimization</strong> — ML models analyze historical pipeline data to skip redundant test jobs, predict flaky tests, and recommend parallelization — cutting CI run times.</li>
+  <li><strong>Anomaly Detection in Deployments</strong> — AI-powered observability (Datadog, Dynatrace) compares current deployments against baselines and surfaces regressions before they become incidents.</li>
+</ul>
+
+<h3>The TPM's Mental Model: AI as a Fast, Fallible Junior</h3>
+<p>The most useful mental model for AI tools in CI/CD is a very fast, confident junior engineer who is sometimes wrong in subtle ways. AI output must still be reviewed — the risk is that teams may over-trust high-confidence AI suggestions. Your job as TPM is to design workflows that keep humans in the loop at the right checkpoints.</p>
+
+<div class="tip"><strong>TPM Context:</strong> When evaluating AI tooling proposals from engineering teams, ask: What is the rollback plan if the AI produces bad output that reaches production? Who is accountable for reviewing AI-generated artifacts? How do we audit AI decisions for compliance?</div>
+
+<h3>Model Risk and Hallucinations</h3>
+<p>AI models can "hallucinate" — produce confident-sounding output that is factually wrong. In a CI/CD context this could mean: auto-generated tests that pass but don't actually test the right behavior, security scan false negatives, or AI-suggested code with subtle logic errors. Banks and regulated industries should treat AI-generated code like any other third-party input: it must pass the same quality gates.</p>
+
+<h3>Key Terminology</h3>
+<ul>
+  <li><strong>LLM (Large Language Model)</strong> — The AI model class powering most coding tools (GPT-4, Claude, Gemini)</li>
+  <li><strong>RAG (Retrieval-Augmented Generation)</strong> — A technique where the AI is grounded in your codebase/docs to reduce hallucinations</li>
+  <li><strong>Agent</strong> — An AI that can take actions (run tests, open PRs, call APIs) autonomously within defined guardrails</li>
+  <li><strong>Fine-tuning</strong> — Training a base model further on your company's code to make it more accurate for your domain</li>
+</ul>`,
+        takeaways: [
+          "AI is embedded across the SDLC: code generation, review, testing, pipeline optimization, and monitoring",
+          "Treat AI output like a fast junior engineer — valuable but must be reviewed",
+          "Hallucinations are real: AI-generated code must still pass your existing quality gates",
+          "TPM role: define accountability, review checkpoints, and rollback plans for AI tooling",
+          "Key terms: LLM, RAG, Agent, Fine-tuning"
+        ],
+        resources: [
+          { type: "article", title: "GitHub Copilot Impact Study (Microsoft Research)", desc: "Quantified productivity impact of AI coding assistants", url: "https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/" },
+          { type: "docs", title: "Google DORA: AI & DevOps", desc: "DORA research on AI's effect on software delivery performance", url: "https://dora.dev/research/2024/dora-report/" },
+          { type: "article", title: "CodeRabbit AI Code Review", desc: "Overview of AI-assisted PR review tooling", url: "https://coderabbit.ai/" },
+          { type: "video", title: "AI Coding Assistants Explained", desc: "Practical overview for non-engineers", url: "https://www.youtube.com/watch?v=Z-2YHAFVkM0" }
+        ],
+        quiz: [
+          {
+            q: "A developer uses an AI tool that auto-generates unit tests for every new function. Which risk should the TPM ensure the team has mitigated?",
+            options: [
+              "The tests will run too slowly in CI",
+              "The AI-generated tests may pass without actually validating the correct behavior",
+              "Unit tests are unnecessary when AI generates the code",
+              "The team will write too many tests, slowing down deployment"
+            ],
+            answer: 1,
+            explanation: "AI-generated tests can be syntactically valid and pass the CI pipeline while not testing the actual intended behavior (e.g., testing a mock instead of real logic). Human review of test quality remains essential — test count does not equal test quality."
+          },
+          {
+            q: "Your engineering team proposes adopting an AI code review tool that auto-approves PRs below a certain risk score. As TPM, what is the most important governance question to raise?",
+            options: [
+              "Which vendor has the highest GitHub star count?",
+              "How much does the tool cost per seat?",
+              "Who is accountable when an auto-approved PR causes a production incident?",
+              "Will the tool support all programming languages in use?"
+            ],
+            answer: 2,
+            explanation: "Accountability is the core governance question. Automated approvals remove human sign-off, which matters for audit trails, regulatory compliance, and incident response. Before adopting any AI gate, the team must define who owns the outcome when the AI is wrong."
+          },
+          {
+            q: "What does 'hallucination' mean in the context of AI coding tools?",
+            options: [
+              "The AI runs code in a sandboxed virtual environment",
+              "The AI produces confident-sounding but factually incorrect output",
+              "The AI imagines new features the developer didn't ask for",
+              "A visual glitch in the IDE plugin"
+            ],
+            answer: 1,
+            explanation: "In AI/ML, hallucination refers to a model generating output that sounds plausible and confident but is factually wrong or fabricated. For code tools this might mean referencing non-existent APIs, generating logically flawed tests, or inventing security vulnerabilities that don't exist."
+          },
+          {
+            q: "Which AI technique grounds a model in your company's actual codebase and documentation to improve accuracy?",
+            options: ["Fine-tuning", "RAG (Retrieval-Augmented Generation)", "Prompt chaining", "Model quantization"],
+            answer: 1,
+            explanation: "RAG (Retrieval-Augmented Generation) retrieves relevant context (your docs, code, runbooks) at query time and includes it in the prompt, so the model's answers are grounded in your actual information rather than just its training data. This significantly reduces hallucinations in domain-specific tasks."
+          },
+          {
+            q: "An AI agent in your CI pipeline is configured to automatically open fix PRs when security vulnerabilities are detected. This is an example of:",
+            options: [
+              "Continuous Integration",
+              "Manual remediation workflow",
+              "Agentic AI taking autonomous action within the pipeline",
+              "Static Application Security Testing (SAST)"
+            ],
+            answer: 2,
+            explanation: "An AI agent is an AI system that can take actions — not just generate text — such as opening PRs, running commands, or calling APIs. This is distinct from a passive AI reviewer. Agentic AI in pipelines raises important questions about guardrails, approval gates, and rollback handling."
+          }
+        ]
+      },
+      {
+        id: "ai-quality-gates",
+        title: "AI-Assisted Quality Gates",
+        duration: "9 min read",
+        content: `
+<h3>What Are Quality Gates?</h3>
+<p>Quality gates are automated checkpoints in a CI/CD pipeline that block a build from progressing unless it meets defined standards — code coverage thresholds, zero critical vulnerabilities, linting passing, etc. Traditionally these gates are rule-based. AI is now being used to make them smarter, faster, and more contextual.</p>
+
+<h3>Traditional vs. AI-Augmented Gates</h3>
+<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0;">
+  <thead>
+    <tr style="background:var(--surface);font-weight:700;">
+      <th style="padding:8px 12px;text-align:left;border:1px solid var(--border);">Gate Type</th>
+      <th style="padding:8px 12px;text-align:left;border:1px solid var(--border);">Traditional</th>
+      <th style="padding:8px 12px;text-align:left;border:1px solid var(--border);">AI-Augmented</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border);">Code Review</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">Peer human review</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">AI pre-screens PRs, flags issues before human review</td>
+    </tr>
+    <tr style="background:var(--surface);">
+      <td style="padding:8px 12px;border:1px solid var(--border);">Security Scan</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">Rule-based SAST (e.g., SonarQube rules)</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">AI detects novel vulnerability patterns beyond known rules</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border);">Test Coverage</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">% threshold (e.g., 80% coverage required)</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">AI identifies high-risk uncovered paths, not just raw %</td>
+    </tr>
+    <tr style="background:var(--surface);">
+      <td style="padding:8px 12px;border:1px solid var(--border);">Deploy Risk</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">Manual change advisory board review</td>
+      <td style="padding:8px 12px;border:1px solid var(--border);">ML model scores deployment risk based on change history</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>AI-Powered Deployment Risk Scoring</h3>
+<p>One of the most impactful AI applications for TPMs is deployment risk scoring. Tools like Google's ChangeRisk (internal) and commercial platforms analyze factors such as:</p>
+<ul>
+  <li>Size and complexity of the code change</li>
+  <li>Historical failure rate of similar changes</li>
+  <li>Time of day and recent incident history</li>
+  <li>Author's commit history and test coverage trends</li>
+</ul>
+<p>The output is a risk score that can gate deployments automatically or escalate them for human review. This replaces (or supplements) the traditional Change Advisory Board (CAB) process.</p>
+
+<div class="tip"><strong>TPM Context:</strong> If your org is evaluating AI risk scoring for deployments, be prepared to explain to compliance and audit teams how the model makes decisions. "Black box" AI decisions on production deployments are a regulatory concern in banking. Explainability matters.</div>
+
+<h3>Flaky Test Detection</h3>
+<p>Flaky tests — tests that pass or fail non-deterministically — are a major CI/CD pain point. They erode trust in the pipeline and slow teams down. AI can analyze historical test run data to identify flaky tests, predict which tests are likely to flake on a given change, and suggest quarantine actions. This is a high-leverage, low-risk AI use case to advocate for.</p>
+
+<h3>The False Positive Problem</h3>
+<p>AI security scanners and code reviewers generate false positives — flagging issues that aren't real. High false positive rates cause alert fatigue: developers start ignoring all AI feedback. When evaluating AI quality gate tools, always ask vendors for their false positive rate on a sample of your actual code, not just marketing benchmarks.</p>`,
+        takeaways: [
+          "Quality gates block pipeline progression unless defined standards are met; AI makes them more contextual",
+          "AI deployment risk scoring replaces/augments CAB reviews with ML-based change analysis",
+          "Flaky test detection is a high-ROI, low-risk AI use case for CI/CD pipelines",
+          "High false positive rates cause alert fatigue — evaluate tools on YOUR codebase, not vendor benchmarks",
+          "Explainability is critical for AI gates in regulated industries — black-box decisions on production are a compliance risk"
+        ],
+        resources: [
+          { type: "article", title: "Fixing Flaky Tests with AI — Google Testing Blog", desc: "How Google uses ML to detect and quarantine flaky tests", url: "https://testing.googleblog.com/2020/12/test-flakiness-one-of-main-challenges.html" },
+          { type: "docs", title: "SonarQube AI Code Review", desc: "SonarQube's AI-assisted code quality analysis", url: "https://www.sonarsource.com/solutions/ai-code-quality/" },
+          { type: "article", title: "Deployment Risk Scoring at Scale", desc: "Engineering practices for ML-based change risk assessment", url: "https://martinfowler.com/articles/cd4ml.html" },
+          { type: "video", title: "AI Security Scanning in CI Pipelines", desc: "Practical demo of AI-powered SAST integration", url: "https://www.youtube.com/watch?v=YVgj4sJGMFQ" }
+        ],
+        quiz: [
+          {
+            q: "A team's AI security scanner flags 80% of PRs with issues, but developers say 90% of those flags are irrelevant. This is called:",
+            options: ["A false negative problem", "A false positive problem causing alert fatigue", "Model overfitting", "A deployment risk escalation"],
+            answer: 1,
+            explanation: "A high false positive rate means the AI is flagging things that aren't actually problems. When this happens at scale, developers stop trusting and reading the AI's output — alert fatigue. This undermines the tool's value and can be worse than no AI scanner at all."
+          },
+          {
+            q: "Your compliance team asks how the AI deployment risk model decides to block a production deploy. The vendor says 'the model is proprietary and we can't share the logic.' What is the TPM's correct response?",
+            options: [
+              "Accept it — all AI models are black boxes",
+              "Escalate to engineering to reverse-engineer the model",
+              "Raise this as a compliance risk — regulatory environments require explainable decision-making for production gates",
+              "Approve it as long as the accuracy metrics look good"
+            ],
+            answer: 2,
+            explanation: "In regulated industries, especially banking, automated decisions that block or allow production deployments must be auditable and explainable. A 'trust us' black-box model doesn't satisfy audit requirements. This is a real vendor qualification criterion, not a nice-to-have."
+          },
+          {
+            q: "Which of the following is the BEST description of flaky tests?",
+            options: [
+              "Tests that take too long to run and should be removed",
+              "Tests that fail consistently due to a known bug",
+              "Tests that pass or fail non-deterministically, eroding pipeline trust",
+              "Tests written by AI that have not been reviewed"
+            ],
+            answer: 2,
+            explanation: "Flaky tests produce inconsistent results across identical runs — they might pass, then fail, then pass again with no code changes. They're one of the most common causes of CI/CD pipeline trust erosion and are expensive to debug manually. AI-based detection analyzes historical run data to identify them automatically."
+          },
+          {
+            q: "An AI model scores deployment risk based on code complexity, change size, author history, and time of day. This AI model is BEST described as:",
+            options: [
+              "A generative AI model like ChatGPT",
+              "A rule-based SAST scanner",
+              "A predictive ML model trained on historical deployment and incident data",
+              "A RAG pipeline grounded in your runbooks"
+            ],
+            answer: 2,
+            explanation: "Deployment risk scoring uses predictive machine learning — specifically supervised learning on historical data linking change characteristics to incident outcomes. This is distinct from generative AI (which produces text/code) or rule-based scanners (which apply fixed rules). It's a classification/regression task, not generation."
+          }
+        ]
+      },
+      {
+        id: "ai-tpm-strategy",
+        title: "TPM Strategy for AI-Powered Products",
+        duration: "11 min read",
+        content: `
+<h3>The TPM's New Mandate</h3>
+<p>More and more products now include AI features — recommendations, summarization, anomaly detection, intelligent routing. As a Senior TPM, you will increasingly be asked to drive roadmaps, define success metrics, manage vendors, and mitigate risks for products where AI is a core component. This requires a different playbook than traditional software TPM work.</p>
+
+<h3>Defining Success Metrics for AI Features</h3>
+<p>Traditional software features have clear success criteria (page load time, error rate, task completion rate). AI features are murkier. A chatbot might respond quickly but with bad answers. A recommendation model might have high click-through but low conversion. You need to define both:</p>
+<ul>
+  <li><strong>Model metrics</strong> — Accuracy, precision, recall, F1, AUC-ROC (you don't need to compute these, but you need to know what they measure)</li>
+  <li><strong>Product metrics</strong> — Task completion rate, user satisfaction (CSAT/NPS), support ticket reduction, time saved</li>
+  <li><strong>Business metrics</strong> — Revenue impact, cost reduction, compliance events prevented</li>
+</ul>
+<p>A common TPM mistake is accepting "the model is 95% accurate" as a success criterion without connecting it to a product or business outcome. Accuracy alone doesn't tell you if the feature is valuable.</p>
+
+<h3>The AI Product Lifecycle</h3>
+<p>AI products have a lifecycle that differs from standard software:</p>
+<ol>
+  <li><strong>Problem framing</strong> — Is this actually an ML problem? Not everything needs AI.</li>
+  <li><strong>Data audit</strong> — Do we have enough labeled, high-quality training data? Who owns it?</li>
+  <li><strong>Baseline</strong> — What's the current performance without AI? (You can't claim improvement without one)</li>
+  <li><strong>Model development & evaluation</strong> — Offline evaluation against held-out data</li>
+  <li><strong>Shadow mode</strong> — Model runs in production but output is not shown to users; compare against live system</li>
+  <li><strong>Gradual rollout</strong> — A/B test or canary deploy AI to a subset of users</li>
+  <li><strong>Monitoring & drift detection</strong> — Model performance degrades as data distribution shifts; requires ongoing monitoring</li>
+</ol>
+
+<div class="tip"><strong>TPM Context:</strong> As TPM, you are responsible for ensuring steps 1–3 happen before engineering starts building. "We should add AI" is not a requirements document. Push back until you have a clear problem statement, a data audit, and a defined baseline.</div>
+
+<h3>Model Drift: The Silent Killer</h3>
+<p>Unlike traditional software, AI models can degrade in production without any code change. This happens when the real-world data the model sees in production shifts away from the data it was trained on — called <strong>data drift</strong> or <strong>model drift</strong>. Example: a fraud detection model trained on pre-COVID transaction patterns performs poorly after spending behaviors change post-COVID.</p>
+<p>TPMs must ensure AI products have monitoring dashboards that track model performance metrics over time and alert when performance drops below thresholds — just like you'd alert on p99 latency for an API.</p>
+
+<h3>Responsible AI & Bias</h3>
+<p>AI models can perpetuate or amplify biases present in their training data. In financial services this is particularly high stakes — a credit scoring model trained on biased historical data can produce discriminatory lending decisions, which is both an ethical problem and a legal/regulatory violation. As TPM, you should:</p>
+<ul>
+  <li>Include a bias audit in the AI product launch checklist</li>
+  <li>Define protected attributes and ensure the model is evaluated for fairness across them</li>
+  <li>Involve legal/compliance early — don't treat this as a post-launch review</li>
+</ul>
+
+<h3>Vendor vs. Build Decision Framework</h3>
+<p>When evaluating AI tooling, the build-vs-buy decision has a new axis: <strong>data ownership and model training</strong>. Sending your proprietary codebase, customer data, or transaction records to a third-party LLM API raises data privacy, security, and regulatory questions. Key questions to answer:</p>
+<ul>
+  <li>Does the vendor use our data to train their models? (If yes, this may violate data governance policies)</li>
+  <li>Is the model hosted in our environment or the vendor's cloud?</li>
+  <li>What certifications does the vendor have? (SOC 2, ISO 27001, FedRAMP)</li>
+  <li>What is the data retention policy for API calls?</li>
+</ul>`,
+        takeaways: [
+          "AI features need model metrics AND product/business metrics — accuracy alone is not a success criterion",
+          "AI product lifecycle: Problem framing → Data audit → Baseline → Build → Shadow mode → Gradual rollout → Monitor",
+          "Model drift: AI can degrade in production without any code change — requires ongoing monitoring",
+          "Bias audits belong in the launch checklist, especially in financial services where bias = regulatory violation",
+          "Vendor evaluation: ask about data training practices, hosting model, certifications, and data retention"
+        ],
+        resources: [
+          { type: "article", title: "ML Product Management — Chip Huyen", desc: "Practical guide to TPM/PM work on ML products", url: "https://huyenchip.com/2021/02/05/real-time-machine-learning-challenges-and-solutions.html" },
+          { type: "book", title: "Designing Machine Learning Systems", desc: "Chip Huyen — end-to-end ML system design including monitoring and drift", url: "https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" },
+          { type: "article", title: "Google Responsible AI Practices", desc: "Framework for building fair and accountable AI", url: "https://ai.google/responsibility/responsible-ai-practices/" },
+          { type: "docs", title: "AWS Model Monitor — Drift Detection", desc: "Practical tooling for production model monitoring", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html" }
+        ],
+        quiz: [
+          {
+            q: "An engineering team says their new AI recommendation feature is ready because 'the model hits 93% accuracy in testing.' What is the most important follow-up question a TPM should ask?",
+            options: [
+              "What framework was used to build the model?",
+              "How does 93% accuracy translate into a measurable product or business outcome?",
+              "Can we increase it to 95% before launching?",
+              "Who on the team trained the model?"
+            ],
+            answer: 1,
+            explanation: "Model accuracy is a means, not an end. 93% accuracy on a test set tells you almost nothing about whether the feature will drive the intended product outcome (e.g., task completion, reduced support tickets, revenue). TPMs must connect model metrics to business value before declaring readiness."
+          },
+          {
+            q: "Six months after launch, a fraud detection model's performance metrics begin declining even though no code changes were made. What is most likely happening?",
+            options: [
+              "The model has a bug that was not caught in testing",
+              "Model drift — the real-world data distribution has shifted away from the training data",
+              "The pipeline is running out of compute resources",
+              "The model needs to be retrained on newer hardware"
+            ],
+            answer: 1,
+            explanation: "Model drift (also called data drift or concept drift) occurs when the statistical properties of real-world inputs change over time, making the model's learned patterns less accurate. This is a normal phenomenon for ML systems, which is why production monitoring of model performance metrics is mandatory — not optional."
+          },
+          {
+            q: "Before approving a vendor AI tool that will analyze your company's customer transaction data, which question is MOST critical from a regulatory standpoint?",
+            options: [
+              "Does the vendor's dashboard have dark mode?",
+              "Does the vendor use our transaction data to train their models, and what is their data retention policy?",
+              "How many other banks use the tool?",
+              "What is the vendor's SLA for uptime?"
+            ],
+            answer: 1,
+            explanation: "Sending customer financial data to a third-party vendor that uses it for model training can violate data privacy regulations (GDPR, CCPA, GLBA), contractual data governance policies, and customer consent agreements. This is a procurement-blocking issue, not a checkbox concern. Data retention policy governs how long the vendor holds your data after queries."
+          },
+          {
+            q: "What is 'shadow mode' in the context of an AI product rollout?",
+            options: [
+              "Running the model only at night to avoid impacting daytime users",
+              "A security feature that hides model outputs from external auditors",
+              "Deploying the model to production where it generates predictions but users do not see the output — used to compare against the live system",
+              "Training the model on anonymized or masked data"
+            ],
+            answer: 2,
+            explanation: "Shadow mode (also called shadow deployment or dark launch) lets you run the new AI model in production against real traffic without surfacing its output to users. You compare the AI's predictions against the existing system's behavior to catch issues before full rollout — without the risk of a bad model affecting users."
+          },
+          {
+            q: "A TPM is told 'we need to add AI to the platform' by an executive. What should be the TPM's FIRST step?",
+            options: [
+              "Immediately start an RFP for AI vendors",
+              "Ask engineering to estimate how long model training will take",
+              "Define the specific problem to be solved, confirm it is genuinely an ML problem, and establish a baseline metric",
+              "Schedule a demo of ChatGPT for the executive"
+            ],
+            answer: 2,
+            explanation: "Adding AI for its own sake is a common antipattern. The first step is rigorous problem framing: What specific outcome do we want to improve? Can a simpler rule-based solution solve it? What is the current baseline we are trying to beat? Without this, you will build an expensive system with no defined success criteria and no way to know if it worked."
+          }
+        ]
+      }
+    ]
   }
 ];
