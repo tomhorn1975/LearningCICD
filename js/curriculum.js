@@ -826,5 +826,366 @@ fortify-sast:
         ]
       }
     ]
+  },
+  {
+    id: "executive-communication",
+    title: "Executive Communication",
+    icon: "🎙",
+    desc: "How to speak to technical and non-technical executives as a TPM",
+    lessons: [
+      {
+        id: "exec-communication-mindset",
+        title: "The Executive Mindset: What They Actually Care About",
+        duration: "10 min read",
+        content: `
+<h3>Executives Think Differently Than Engineers</h3>
+<p>Engineers optimize for correctness, completeness, and technical accuracy. Executives optimize for <strong>decisions, risk, and outcomes</strong>. When you walk into an executive meeting, you are not there to explain how something works — you are there to give them what they need to act or to confirm they don't need to act.</p>
+
+<p>Understanding this shift is the most important communication skill you can develop as a TPM.</p>
+
+<h3>What Every Executive Is Really Asking</h3>
+<p>No matter what you're presenting, executives are filtering everything through four questions:</p>
+<ol>
+  <li><strong>So what?</strong> — Why does this matter to the business?</li>
+  <li><strong>What's the risk?</strong> — Could this hurt us? How badly?</li>
+  <li><strong>What do you need from me?</strong> — Is there a decision, resource, or unblock required?</li>
+  <li><strong>Are you in control?</strong> — Do I need to worry about this, or do you have it handled?</li>
+</ol>
+<p>If you answer all four clearly, you've had a successful executive communication — regardless of how technical the underlying topic is.</p>
+
+<h3>Technical Executives vs. Non-Technical Executives</h3>
+<p>Many TPMs make the mistake of adjusting only vocabulary. The real adjustment is <em>depth and starting point</em>.</p>
+<ul>
+  <li><strong>Technical executives (CTO, VP Engineering):</strong> You can use precise terms — "pipeline failure rate," "P99 latency," "SAST scan." They will catch vague language. Lead with the problem and data, then offer to go deeper. They want accuracy.</li>
+  <li><strong>Non-technical executives (CEO, CFO, Chief Risk Officer):</strong> Skip the mechanism, lead with the business impact. Don't say "our GitLab runner pool was exhausted." Say "our deployment system slowed down, which delayed the feature release by two days and pushed our customer go-live." The mechanism is your job to manage — the impact is theirs to care about.</li>
+</ul>
+
+<div class="tip"><strong>TPM Rule of Thumb:</strong> If an executive has to ask "what does that mean for us?" — you led with the wrong thing. Lead with the business impact, then offer the technical detail if asked.</div>
+
+<h3>Reading the Room</h3>
+<p>You will often be in rooms with mixed audiences — a CTO and a CFO in the same meeting. Start at the business level. If a technical executive wants to go deeper, they will ask. If you start technical, you've lost the non-technical executives before you finish your first sentence.</p>
+
+<h3>The "Pyramid Principle"</h3>
+<p>A communication framework widely used in consulting and leadership: lead with your conclusion, then support it with data. Never build up to a conclusion — executives don't have time for the journey.</p>
+<ul>
+  <li><strong>Wrong:</strong> "We analyzed the pipeline logs, identified three failure modes, ran root cause analysis, and after reviewing the data we concluded that we need to upgrade our runner capacity."</li>
+  <li><strong>Right:</strong> "We need to upgrade our CI runner capacity — it's the root cause of our deployment slowdowns. Here's the data."</li>
+</ul>`,
+        takeaways: [
+          "Executives filter everything through: so what, risk, what do you need, are you in control",
+          "Lead with business impact, not technical mechanism — regardless of audience",
+          "Technical execs want accuracy; non-technical execs want business consequences",
+          "Use the Pyramid Principle: conclusion first, supporting data second",
+          "Mixed audiences: always start at the business level, let technical execs pull for depth"
+        ],
+        resources: [
+          { type: "book", title: "The Pyramid Principle", desc: "Barbara Minto — the definitive guide to executive-level structured communication", url: "https://www.amazon.com/Pyramid-Principle-Logic-Writing-Thinking/dp/0273710516" },
+          { type: "article", title: "How to Communicate with Executives", desc: "Harvard Business Review — translating technical work for leadership", url: "https://hbr.org/2015/04/the-best-ways-to-deal-with-people-who-arent-tech-savvy" },
+          { type: "video", title: "Executive Presence for Technical Leaders", desc: "Overview of presence and communication style for technical roles moving into leadership", url: "https://www.youtube.com/watch?v=RkbEp6JAoX8" }
+        ],
+        quiz: [
+          {
+            q: "You need to tell the CFO that a CI/CD pipeline outage delayed your release. What is the best opening sentence?",
+            options: [
+              "Our GitLab runner pool hit capacity limits causing pipeline queue times to spike to 45 minutes.",
+              "The release of the payments feature is delayed by two days, which pushes the customer go-live to Thursday.",
+              "We had a technical incident in our DevOps infrastructure that required root cause analysis.",
+              "I wanted to give you a heads up about some issues we've been debugging this week."
+            ],
+            answer: 1,
+            explanation: "The CFO cares about the business outcome — the delayed go-live — not the mechanism. Lead with the impact (two-day delay, Thursday go-live), then be ready to explain the cause if asked. Options A and C lead with technical detail. Option D is vague and buries the impact."
+          },
+          {
+            q: "You're presenting to a mixed group: the CTO (technical) and the Chief Risk Officer (non-technical). Where should you start?",
+            options: [
+              "Start technical — the CTO is the most senior engineering leader in the room",
+              "Start at the business impact level — let the CTO ask for technical depth if needed",
+              "Prepare two separate presentations and switch between them",
+              "Ask the CTO to leave the room while you brief the CRO first"
+            ],
+            answer: 1,
+            explanation: "Always anchor to the business level first in mixed audiences. Technical executives can follow a business-level summary and will ask for depth. Non-technical executives will be lost if you open with technical detail and may disengage before you reach the part that matters to them."
+          },
+          {
+            q: "An executive asks 'are we on track?' during a status update. What does she really want to know?",
+            options: [
+              "A detailed breakdown of every task and its completion percentage",
+              "Whether she needs to worry about this or take action, or whether you have it under control",
+              "The names of every team member working on the project",
+              "A technical explanation of the blockers the team is facing"
+            ],
+            answer: 1,
+            explanation: "Executives asking 'are we on track?' are really asking two things: do I need to act, and do I need to worry? Answer those directly: 'Yes, we're on track for the March 15 launch, no action needed from you' or 'We're at risk — I need a decision on X by Wednesday.' Don't bury the answer in a status recitation."
+          },
+          {
+            q: "What is the Pyramid Principle?",
+            options: [
+              "A method for organizing teams into hierarchical reporting structures",
+              "A communication approach where you lead with your conclusion, then support it with data",
+              "A technique for building slide decks with exactly three levels of detail",
+              "A framework for escalating issues through management layers"
+            ],
+            answer: 1,
+            explanation: "The Pyramid Principle (Barbara Minto) says: lead with the answer/conclusion at the top, then provide the supporting arguments and data below it. The opposite — building to a conclusion — makes executives wait through context they may not need before hearing what they actually care about."
+          }
+        ]
+      },
+      {
+        id: "exec-language-translation",
+        title: "Translating Technical Language for Executives",
+        duration: "12 min read",
+        content: `
+<h3>Why Technical Language Fails in Executive Rooms</h3>
+<p>Technical language is precise and efficient — within a technical team. In an executive room, it does the opposite: it signals that you haven't done the work of translating your domain into business terms. The best TPMs are fluent in both languages and know which one to use.</p>
+
+<p>This is not about "dumbing things down." It's about respecting your audience's context and time.</p>
+
+<h3>The Translation Framework</h3>
+<p>For any technical concept, ask three questions:</p>
+<ol>
+  <li><strong>What is the business consequence if this goes wrong?</strong></li>
+  <li><strong>What does success look like to the business?</strong></li>
+  <li><strong>What decision or awareness does the executive need from this?</strong></li>
+</ol>
+<p>Your answer to those three questions is the executive version. The technical explanation is the appendix.</p>
+
+<h3>Common Translations: CI/CD to Executive Language</h3>
+<table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+  <thead>
+    <tr style="background:var(--surface-2);text-align:left;">
+      <th style="padding:10px 12px;border:1px solid var(--border);">Technical Term</th>
+      <th style="padding:10px 12px;border:1px solid var(--border);">Executive Translation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:10px 12px;border:1px solid var(--border);">Pipeline failure</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">Our automated quality check caught an issue before it reached customers — we blocked the release until it's fixed</td>
+    </tr>
+    <tr style="background:var(--surface-2);">
+      <td style="padding:10px 12px;border:1px solid var(--border);">Deployment frequency increased from weekly to daily</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">We can now deliver new features and fixes to customers 5x faster than before</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border:1px solid var(--border);">MTTR dropped from 4 hours to 30 minutes</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">When something breaks in production, we now restore service 8x faster — reducing customer impact</td>
+    </tr>
+    <tr style="background:var(--surface-2);">
+      <td style="padding:10px 12px;border:1px solid var(--border);">We need to upgrade our GitLab runner fleet</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">Our build infrastructure is at capacity and causing delays — I need $X to upgrade it, which will cut build times in half</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border:1px solid var(--border);">SAST scan flagged a critical vulnerability</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">Our automated security check found a high-severity issue — we are blocking this release until it's resolved, estimated 2 days</td>
+    </tr>
+    <tr style="background:var(--surface-2);">
+      <td style="padding:10px 12px;border:1px solid var(--border);">Change failure rate is 12%</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">About 1 in 8 releases is causing an incident — industry best practice is under 5%. We have a plan to close that gap.</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border:1px solid var(--border);">We're migrating from Jenkins to GitLab CI</td>
+      <td style="padding:10px 12px;border:1px solid var(--border);">We're replacing our aging build system with a modern platform — it reduces maintenance overhead and speeds up delivery</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Numbers That Resonate With Executives</h3>
+<p>Not all metrics are executive-friendly. Translate engineering metrics into business metrics:</p>
+<ul>
+  <li><strong>Time → Revenue or Customer Impact:</strong> "Each hour of downtime costs us approximately $X in transaction volume"</li>
+  <li><strong>Frequency → Speed to Market:</strong> "We now ship features 3x faster than our competitors"</li>
+  <li><strong>Error rates → Risk exposure:</strong> "A 10% change failure rate means we introduce production incidents weekly"</li>
+  <li><strong>Coverage → Risk reduction:</strong> "80% automated test coverage means 80% of regression risk is caught before a human touches it"</li>
+</ul>
+
+<h3>Phrases That Build Executive Confidence</h3>
+<p>How you say things matters as much as what you say. These phrases signal control and credibility:</p>
+<ul>
+  <li>"We identified this early — before it reached customers."</li>
+  <li>"We have a mitigation in place. Here's what we're doing."</li>
+  <li>"The risk is bounded — worst case is X."</li>
+  <li>"I need a decision from you on X by [date] — here are the options."</li>
+  <li>"This is on track. No action needed from your side."</li>
+</ul>
+
+<div class="tip"><strong>Avoid these phrases with non-technical executives:</strong> "it's complicated," "the engineers are looking into it" (without a timeline), "I'm not sure yet" (without a plan for finding out). These erode confidence. Replace with bounded uncertainty: "We're investigating — I'll have an answer by 3pm today."</div>
+
+<h3>Handling Technical Questions From Non-Technical Executives</h3>
+<p>When a non-technical executive asks a question that goes deeper than they realize, don't answer at full technical depth. Use the "one layer deeper" rule: go one level more specific than your executive summary, then offer to go further if they want. Usually they don't.</p>
+<p><em>Executive: "Why did the pipeline fail?"</em></p>
+<p><em>Wrong: "The SAST scanner flagged a CWE-89 SQL injection vulnerability in the authentication service's user lookup function."</em></p>
+<p><em>Right: "Our automated security scanner caught a code vulnerability before it could reach customers. The team is fixing it now — estimated 2 days. Do you want more detail?"</em></p>`,
+        takeaways: [
+          "Translation means finding the business consequence, not simplifying the technical detail",
+          "Convert engineering metrics to time, money, risk, or customer impact",
+          "Phrases like 'we caught this early' and 'the risk is bounded' build executive confidence",
+          "Use the 'one layer deeper' rule when answering technical questions from non-technical execs",
+          "Never say 'we're looking into it' without a timeline — always bound your uncertainty"
+        ],
+        resources: [
+          { type: "article", title: "How to Talk to Non-Technical Stakeholders", desc: "Practical guide for translating engineering work into business language", url: "https://hbr.org/2022/11/how-to-explain-technical-concepts-to-non-technical-stakeholders" },
+          { type: "book", title: "Crucial Conversations", desc: "Patterson et al — how to communicate clearly under pressure with senior stakeholders", url: "https://www.amazon.com/Crucial-Conversations-Talking-Stakes-Second/dp/1469266822" },
+          { type: "article", title: "DORA Metrics Explained for Business Leaders", desc: "How to present DORA metrics in business terms", url: "https://dora.dev/guides/dora-metrics-four-keys/" }
+        ],
+        quiz: [
+          {
+            q: "A non-technical executive asks why the release was delayed. The real cause is 'the SAST scanner flagged a critical CVE in a third-party dependency.' What is the best executive-level answer?",
+            options: [
+              "Our automated security check caught a high-risk vulnerability before release — we held the release to fix it, which takes about 2 days.",
+              "The SAST scanner found a CVE-9.8 in our dependency tree that required a patch and re-scan cycle.",
+              "We had a security issue that's very technical and hard to explain — the engineers are handling it.",
+              "The release is delayed because of a software library problem that needs updating."
+            ],
+            answer: 0,
+            explanation: "Option A translates the mechanism into business consequence (security risk caught before customers were exposed) and gives a timeline. Option B is too technical. Option C is vague and erodes confidence. Option D is slightly better but doesn't convey the proactive catch or the concrete timeline."
+          },
+          {
+            q: "You want to tell a CFO that MTTR improved from 4 hours to 30 minutes. What is the most effective way to frame this?",
+            options: [
+              "Our MTTR KPI dropped from 240 minutes to 30 minutes, an 87.5% improvement.",
+              "We improved our mean time to recovery metric significantly this quarter.",
+              "When something breaks in production, we now restore service 8x faster — significantly reducing customer impact and downtime risk.",
+              "The engineering team implemented better monitoring and alerting to reduce incident response time."
+            ],
+            answer: 2,
+            explanation: "Option C translates MTTR into what it means for the business: faster recovery, less customer impact. Option A uses jargon (MTTR, KPI) and raw numbers without business context. Option B is vague. Option D explains the mechanism, not the outcome."
+          },
+          {
+            q: "Which phrase best signals control and credibility to an executive when delivering bad news?",
+            options: [
+              "We're still figuring out what happened.",
+              "The engineers are looking into it.",
+              "We identified the issue early — before it impacted customers. The risk is contained and we'll have a fix by end of day.",
+              "It's complicated but we're on it."
+            ],
+            answer: 2,
+            explanation: "Option C signals that you caught the issue proactively, bounded the risk, and have a concrete timeline. This is exactly what executives need to hear to feel confident. Options A, B, and D all express uncertainty without bounding it — they leave the executive wondering whether to escalate or intervene."
+          },
+          {
+            q: "An executive asks a technical question that would require a 5-minute explanation to answer fully. What should you do?",
+            options: [
+              "Give the full technical explanation so they understand the complexity",
+              "Tell them it's too technical to explain and you'll handle it",
+              "Give one level more detail than your summary, then offer to go deeper if they want — usually they won't",
+              "Redirect to a different topic to avoid getting into the weeds"
+            ],
+            answer: 2,
+            explanation: "The 'one layer deeper' rule respects the executive's time while still being responsive. Most executives ask follow-up questions to gauge your understanding, not because they want the full technical deep-dive. Give enough to show command of the topic, then offer more. If they want the full story, they'll ask — and that's a good sign."
+          }
+        ]
+      },
+      {
+        id: "exec-meeting-formats",
+        title: "Executive Meeting Formats: Status Updates, Escalations & Ask Meetings",
+        duration: "10 min read",
+        content: `
+<h3>Not All Executive Meetings Are the Same</h3>
+<p>One of the most common mistakes TPMs make is treating every executive interaction the same way. The format, tone, and what you prepare should be completely different depending on why you're in the room.</p>
+
+<p>There are three primary types of executive meetings you'll have as a TPM:</p>
+
+<h3>1. The Status Update</h3>
+<p>Purpose: Keep executives informed. They should leave knowing whether to worry or not.</p>
+<p><strong>Structure:</strong></p>
+<ul>
+  <li><strong>Headline first:</strong> "We're on track / at risk / off track for [milestone] on [date]."</li>
+  <li><strong>Key highlights:</strong> 2–3 things that happened since last update that they need to know</li>
+  <li><strong>Risks and mitigations:</strong> What could go wrong and what you're doing about it</li>
+  <li><strong>Next milestone:</strong> What you're driving toward next</li>
+</ul>
+<p><strong>What not to do:</strong> Don't read through a list of tasks. Don't present raw data without interpretation. Don't make them ask "so what?" — answer it preemptively.</p>
+<div class="tip"><strong>Template:</strong> "We are [on track / at risk] for [outcome] on [date]. Since last week: [2-3 highlights]. Key risks: [X — mitigation: Y]. Next milestone: [Z on date]."</div>
+
+<h3>2. The Escalation</h3>
+<p>Purpose: You need awareness, a decision, or a resource unblock from someone above you. This is the most high-stakes executive interaction.</p>
+<p><strong>Structure:</strong></p>
+<ul>
+  <li><strong>The situation:</strong> What's happening, in one sentence</li>
+  <li><strong>The business impact:</strong> What happens if this isn't resolved (be specific — timelines, dollars, customers)</li>
+  <li><strong>What you've already tried:</strong> Executives need to know you've exhausted what's in your control</li>
+  <li><strong>What you need:</strong> Be explicit — a decision, an introduction, a budget approval, a direction call</li>
+  <li><strong>Your recommendation:</strong> Don't just present the problem — have a point of view on what should happen</li>
+</ul>
+<p><strong>Critical rule:</strong> Never escalate without a recommendation. "I don't know what to do" erodes trust. "Here's the situation, here's what I recommend, I need you to authorize it" builds it.</p>
+
+<h3>3. The Ask Meeting</h3>
+<p>Purpose: You need something specific — budget, headcount, a decision, a priority call. This is a selling meeting, not a reporting meeting.</p>
+<p><strong>Structure:</strong></p>
+<ul>
+  <li><strong>The problem:</strong> Set context — what constraint or opportunity is at stake</li>
+  <li><strong>The ask:</strong> State it clearly and early — "I'm here to ask for X"</li>
+  <li><strong>The business case:</strong> Why this investment makes sense — ROI, risk reduction, competitive advantage</li>
+  <li><strong>The cost of inaction:</strong> What happens if you don't get this — deadlines slipped, risk exposure, team impact</li>
+  <li><strong>The options:</strong> Give 2–3 options when possible. Executives like to choose, not just approve or reject.</li>
+</ul>
+<p><strong>Example ask:</strong> "I need to upgrade our CI runner infrastructure. Without it, we'll miss the Q3 delivery commitment. The cost is $X. I can bring it in under the current budget by deferring Y, or I need a $X budget increase. I recommend option 1."</p>
+
+<h3>General Executive Meeting Principles</h3>
+<ul>
+  <li><strong>Bring a one-pager:</strong> A single page they can read in 60 seconds. Executives often decide before the meeting — your doc is your pre-sell.</li>
+  <li><strong>The first 60 seconds matter most:</strong> Lead with the most important thing. If you run out of time, they've heard what matters.</li>
+  <li><strong>Don't fill silence:</strong> Executives think out loud. If they go quiet after you speak, wait. Don't over-explain.</li>
+  <li><strong>Never be surprised by your own data:</strong> Know every number you present. If they ask "what was it last quarter?" and you don't know, you lose credibility fast.</li>
+</ul>`,
+        takeaways: [
+          "Status update: headline first — on track / at risk / off track — then highlights, risks, next milestone",
+          "Escalation: situation, business impact, what you've tried, what you need, your recommendation",
+          "Ask meeting: problem, explicit ask early, business case, cost of inaction, options",
+          "Never escalate without a recommendation — always have a point of view",
+          "First 60 seconds matter most — lead with what's most important"
+        ],
+        resources: [
+          { type: "article", title: "How to Run an Effective Executive Status Update", desc: "Strategies for structured, credible executive communication", url: "https://hbr.org/2020/07/the-art-of-the-executive-update" },
+          { type: "book", title: "Influence Without Authority", desc: "Cohen & Bradford — how TPMs drive outcomes without direct control, including upward influence", url: "https://www.amazon.com/Influence-Without-Authority-Allan-Cohen/dp/0471463302" },
+          { type: "video", title: "How to Present to Executives", desc: "Practical guide to executive presentation structure and delivery", url: "https://www.youtube.com/watch?v=E6m0Rj0GE8w" }
+        ],
+        quiz: [
+          {
+            q: "You're giving a weekly status update to a VP. What should your first sentence be?",
+            options: [
+              "This week the team completed 14 out of 18 planned story points.",
+              "I want to walk you through everything we accomplished this week.",
+              "We are on track for the March 15 launch — no action needed from your side.",
+              "We had some challenges this week that I want to discuss."
+            ],
+            answer: 2,
+            explanation: "Lead with the headline: are we on track or not, and does the executive need to do anything? Option C answers both questions immediately. Options A and B make the executive wait for the conclusion. Option D is vague and signals bad news without being direct about it."
+          },
+          {
+            q: "You need to escalate a dependency that is blocking your team and requires a VP-level conversation with another department. What should you NOT do?",
+            options: [
+              "State the business impact of the block clearly and specifically",
+              "Describe what you've already tried to resolve it at your level",
+              "Present the problem without a recommendation and ask the executive to figure out what to do",
+              "Specify exactly what you need from the executive (an intro, a directive, a decision)"
+            ],
+            answer: 2,
+            explanation: "Never escalate without a recommendation. Presenting a problem and asking the executive to solve it signals that you haven't fully engaged your own problem-solving capacity. Executives expect you to have exhausted your options and come with a specific ask and a point of view on the solution."
+          },
+          {
+            q: "You're asking a CTO for budget to upgrade your CI infrastructure. When should you state your ask?",
+            options: [
+              "At the very end, after you've built up the full business case",
+              "Only if they ask — let the data speak for itself",
+              "Early in the meeting, then support it with the business case",
+              "In the follow-up email after the meeting"
+            ],
+            answer: 2,
+            explanation: "In an Ask meeting, state your ask early. Executives should know why they're in the room within the first minute. Building to a reveal at the end wastes their time and risks running out of time before you get to the ask. Say 'I'm here to ask for X' — then make the case."
+          },
+          {
+            q: "An executive goes quiet after you deliver your update. What should you do?",
+            options: [
+              "Fill the silence by adding more detail and context",
+              "Ask if they have any questions to prompt a response",
+              "Wait — executives often think out loud and silence is part of their processing",
+              "Apologize and ask if you've explained it clearly enough"
+            ],
+            answer: 2,
+            explanation: "Don't fill silence. Executives often go quiet to think, and if you rush to fill it with more information you interrupt their processing and may dilute your key message. Wait. If they need more, they'll ask. Over-explaining after making a strong point often weakens it."
+          }
+        ]
+      }
+    ]
   }
 ];
