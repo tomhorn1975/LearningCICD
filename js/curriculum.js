@@ -1528,5 +1528,424 @@ fortify-sast:
         ]
       }
     ]
+  },
+  {
+    id: "ai-capabilities",
+    title: "AI Capabilities for TPMs",
+    icon: "🤖",
+    desc: "Interview-ready knowledge of enterprise AI/ML capabilities, platforms, and governance",
+    lessons: [
+      {
+        id: "ai-capability-model",
+        title: "The Enterprise AI Capability Model",
+        duration: "10 min read",
+        content: `
+<h3>What is an AI Capability Model?</h3>
+<p>An AI Capability Model is a framework that maps all the organizational and technical capabilities needed to build, deploy, and operate AI/ML systems at enterprise scale. It answers the question: <em>what does a company need to have in place to do AI well?</em></p>
+<p>As a TPM, interviewers will expect you to understand how these capabilities fit together — not just the model itself, but the dependencies between them, and where programs live in this landscape.</p>
+
+<h3>The Major Capability Domains</h3>
+<p>A mature enterprise AI capability model is organized into several distinct domains:</p>
+
+<h4>1. Data Foundation</h4>
+<ul>
+  <li><strong>ML Artifacts & Data Management</strong> — Versioning datasets, features, and model artifacts. Tools: DVC, MLflow, Delta Lake, S3/GCS/ADLS storage.</li>
+  <li><strong>Data Labeling</strong> — Annotating raw data for supervised learning. Tooling: Label Studio, Scale AI, Amazon SageMaker Ground Truth. A TPM owns the labeling pipeline timeline and quality SLA.</li>
+  <li><strong>Feature Store</strong> — A centralized repository of pre-computed, reusable ML features. Prevents every team from recalculating the same features independently. Tools: Feast, Tecton, Vertex AI Feature Store, SageMaker Feature Store.</li>
+</ul>
+
+<h4>2. Model Development</h4>
+<ul>
+  <li><strong>Model Training & Customization</strong> — Infrastructure for training models: compute clusters (GPU/TPU), distributed training frameworks (PyTorch, TensorFlow), fine-tuning foundation models.</li>
+  <li><strong>Experiment Management</strong> — Tracking model experiments: hyperparameters, metrics, and results. Tools: MLflow, Weights & Biases, Neptune, Vertex AI Experiments. Critical for reproducibility.</li>
+  <li><strong>Model Catalog</strong> — A registry of all trained models with metadata: version, training data, performance metrics, owner, and deployment status. The source of truth for what models exist and where they are deployed.</li>
+</ul>
+
+<h4>3. Governance & Safety</h4>
+<ul>
+  <li><strong>Model Validation & Governance</strong> — Formal processes to evaluate model performance, fairness, bias, and compliance before deployment. Includes model cards and documentation requirements.</li>
+  <li><strong>Guardrails</strong> — Technical and process controls to prevent harmful or non-compliant AI outputs. Especially critical in banking: preventing discriminatory lending decisions, ensuring explainability for regulators.</li>
+</ul>
+
+<h4>4. Deployment & Operations</h4>
+<ul>
+  <li><strong>Model Serving & Runtime Management</strong> — Infrastructure for serving model predictions: online (real-time) and batch inference. Tools: TensorFlow Serving, Triton, SageMaker Endpoints, Vertex AI.</li>
+  <li><strong>Model Monitoring & Operations</strong> — Detecting model drift, data drift, and performance degradation post-deployment. Tools: Evidently AI, WhyLabs, SageMaker Model Monitor.</li>
+  <li><strong>AI as a Service (AIaaS)</strong> — Pre-built AI APIs: computer vision, NLP, speech. AWS Rekognition, Google Vision AI, Azure Cognitive Services. Used when you don't need a custom model.</li>
+</ul>
+
+<h4>5. Platform & Security</h4>
+<ul>
+  <li><strong>Cloud Platform & Infrastructure</strong> — The compute, networking, and storage backbone: AWS SageMaker, Google Vertex AI, Azure ML, or on-premise GPU clusters.</li>
+  <li><strong>Model Security</strong> — Protecting models from adversarial attacks, model extraction, and data poisoning. Also covers access control to model endpoints.</li>
+  <li><strong>Internal Tooling</strong> — Company-specific platforms built on top of cloud primitives. A mature org wraps everything in an internal ML platform to enforce standards.</li>
+</ul>
+
+<div class="tip"><strong>Interview tip:</strong> When asked "how would you drive an AI initiative?", anchor your answer to these domains. Show the interviewer you know that AI is more than just a model — it requires data pipelines, governance, monitoring, and a platform underneath it all.</div>`,
+        takeaways: [
+          "An AI Capability Model maps all the capabilities needed: data, model development, governance, deployment, and platform",
+          "Feature stores prevent redundant feature engineering across teams — a sign of AI platform maturity",
+          "Model Catalog + Experiment Management = reproducibility and auditability for regulators",
+          "Governance and guardrails are non-negotiable in banking — bias, explainability, and compliance gates before any deployment",
+          "Model monitoring post-deployment is as important as pre-deployment testing — models drift over time"
+        ],
+        resources: [
+          { type: "article", title: "Google AI Capability Model", desc: "Google's framework for enterprise ML maturity", url: "https://cloud.google.com/architecture/ml-on-gcp-best-practices" },
+          { type: "article", title: "Feature Stores for ML", desc: "Feast open-source feature store documentation", url: "https://docs.feast.dev/" },
+          { type: "docs", title: "MLflow Model Registry", desc: "Model catalog and lifecycle management", url: "https://mlflow.org/docs/latest/model-registry.html" },
+          { type: "article", title: "What is ModelOps?", desc: "Gartner's perspective on operationalizing AI models", url: "https://www.gartner.com/en/information-technology/glossary/modelops" }
+        ],
+        quiz: [
+          {
+            q: "A data science team says they spend 30% of their time recreating features that other teams already compute. What capability would solve this?",
+            options: ["Model Catalog", "Feature Store", "Experiment Management", "Data Labeling"],
+            answer: 1,
+            explanation: "A Feature Store is a centralized repository of pre-computed, reusable ML features. It eliminates redundant feature engineering by allowing teams to share and reuse features across models and projects."
+          },
+          {
+            q: "Before deploying a credit scoring model at a bank, which capability domain is most critical to engage?",
+            options: ["Model Training & Customization", "AI as a Service", "Model Validation & Governance", "Cloud Platform & Infrastructure"],
+            answer: 2,
+            explanation: "Model Validation & Governance ensures the model meets regulatory requirements — fairness testing, bias analysis, explainability documentation, and formal approval. In banking, a credit model that cannot be explained to regulators (ECOA, Fair Lending) cannot be deployed."
+          },
+          {
+            q: "Three months after deploying a fraud detection model, it starts flagging 40% more transactions as fraudulent with no code change. What is most likely happening?",
+            options: ["The model was retrained incorrectly", "Data drift — real-world data patterns have shifted away from training data", "The model catalog is out of date", "The feature store has stale data"],
+            answer: 1,
+            explanation: "Data drift (also called covariate shift) occurs when the statistical distribution of incoming data changes over time relative to what the model was trained on. Fraud patterns evolve. Model Monitoring capabilities detect this — tracking input feature distributions and prediction distributions post-deployment."
+          },
+          {
+            q: "A product manager asks why you need an 'ML Platform' when you can just use Python scripts. What is the strongest argument for a platform?",
+            options: [
+              "Python is too slow for production AI",
+              "A platform enforces reproducibility, governance, security, and operational standards across all teams — without it, every team builds differently and auditability breaks down",
+              "Python scripts cannot connect to databases",
+              "Regulators require an ML platform by law"
+            ],
+            answer: 1,
+            explanation: "Ad-hoc Python scripts are fine for experimentation but fail at scale: you can't audit them, reproduce results, enforce data access controls, monitor deployed models, or onboard new teams consistently. An ML platform standardizes these concerns across the organization — critical for a regulated industry like banking."
+          }
+        ]
+      },
+      {
+        id: "mlops-foundations",
+        title: "MLOps: Operationalizing AI",
+        duration: "9 min read",
+        content: `
+<h3>What is MLOps?</h3>
+<p>MLOps (Machine Learning Operations) applies DevOps principles to the machine learning lifecycle. It covers the practices and tooling needed to reliably build, deploy, monitor, and maintain ML models in production.</p>
+<p>The core insight: <strong>training a model is easy; keeping it reliable in production is hard.</strong> MLOps is the discipline that bridges data science experimentation and production engineering.</p>
+
+<h3>The ML Lifecycle vs. the Software Lifecycle</h3>
+<p>ML projects have a fundamentally different lifecycle from regular software:</p>
+<table>
+  <tr><th>Software (CI/CD)</th><th>ML (MLOps)</th></tr>
+  <tr><td>Code changes trigger builds</td><td>Data changes AND code changes trigger retraining</td></tr>
+  <tr><td>Tests verify logic</td><td>Tests verify model performance metrics AND data quality</td></tr>
+  <tr><td>Deploy once, stays stable</td><td>Models degrade over time (drift); need retraining pipelines</td></tr>
+  <tr><td>Version control for code only</td><td>Version control for code, data, AND model weights</td></tr>
+  <tr><td>Monitoring: uptime, latency, errors</td><td>Monitoring: uptime + data drift + prediction drift + fairness</td></tr>
+</table>
+
+<h3>MLOps Maturity Levels</h3>
+<p>Google defines three levels of MLOps maturity — interviewers love asking where a company is on this spectrum:</p>
+<ul>
+  <li><strong>Level 0 — Manual process:</strong> Data scientists train models manually in notebooks. Handoff to engineering is a one-time event. No automation. Common at early-stage AI efforts.</li>
+  <li><strong>Level 1 — ML pipeline automation:</strong> Training is automated via pipelines triggered by data changes or a schedule. Models are retrained automatically. Feature engineering is part of the pipeline.</li>
+  <li><strong>Level 2 — CI/CD for ML:</strong> The training pipeline itself is treated as code — tested, versioned, and deployed via CI/CD. Multiple teams can independently release new models. Experiment tracking, model registry, and monitoring are all integrated.</li>
+</ul>
+
+<h3>Key MLOps Pipeline Components</h3>
+<ol>
+  <li><strong>Data ingestion & validation</strong> — Pull data, validate schema, detect anomalies. (TFX Data Validation, Great Expectations)</li>
+  <li><strong>Feature engineering</strong> — Transform raw data into model inputs. Ideally reads from Feature Store.</li>
+  <li><strong>Model training</strong> — Parameterized training job. Logs metrics to experiment tracker.</li>
+  <li><strong>Model evaluation</strong> — Compare new model vs. current champion on holdout set. Automated pass/fail gate.</li>
+  <li><strong>Model registry push</strong> — If evaluation passes, push to model catalog with metadata.</li>
+  <li><strong>Deployment</strong> — Blue/green or canary rollout to serving infrastructure.</li>
+  <li><strong>Monitoring</strong> — Continuous tracking of data drift, prediction drift, and business metrics.</li>
+  <li><strong>Retraining trigger</strong> — Scheduled, or triggered by drift alerts.</li>
+</ol>
+
+<h3>Online vs. Batch Inference</h3>
+<ul>
+  <li><strong>Online (real-time) inference:</strong> The model is called via an API for each prediction. Latency matters. Example: fraud detection on a card swipe (sub-100ms SLA).</li>
+  <li><strong>Batch inference:</strong> Run the model over a large dataset on a schedule. Latency doesn't matter; throughput does. Example: scoring all 2M customers nightly for marketing campaigns.</li>
+</ul>
+
+<div class="tip"><strong>TPM Interview Framing:</strong> When asked about driving an AI program, map it to MLOps maturity. "We're at Level 0 today — my goal for Q2 is to automate the training pipeline and add a model registry, getting us to Level 1. That unblocks us from the manual handoffs that are causing our 6-week retraining cycle."</div>`,
+        takeaways: [
+          "MLOps = DevOps applied to ML — adds data and model versioning, drift monitoring, and automated retraining",
+          "MLOps Level 0 = manual notebooks; Level 1 = automated pipelines; Level 2 = CI/CD for the pipeline itself",
+          "Online inference = real-time API (fraud detection); Batch inference = scheduled bulk scoring (marketing campaigns)",
+          "Model evaluation gate (new model vs. champion) before promotion to production is a critical MLOps control",
+          "Models degrade over time — monitoring for data drift and prediction drift is an operational, not optional, concern"
+        ],
+        resources: [
+          { type: "article", title: "MLOps: Continuous delivery for ML", desc: "Google's authoritative MLOps maturity model", url: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning" },
+          { type: "docs", title: "MLflow Documentation", desc: "Open source MLOps platform for experiment tracking and model registry", url: "https://mlflow.org/docs/latest/" },
+          { type: "article", title: "Evidently AI — ML Monitoring Guide", desc: "Practical guide to monitoring ML models in production", url: "https://www.evidentlyai.com/ml-monitoring" },
+          { type: "video", title: "MLOps Explained", desc: "DeepLearning.AI MLOps specialization overview", url: "https://www.youtube.com/watch?v=NgWujOrCZFo" }
+        ],
+        quiz: [
+          {
+            q: "A bank's fraud model is retrained manually every 6 months by a data scientist who exports a Jupyter notebook to engineering. This is:",
+            options: ["MLOps Level 2", "MLOps Level 1", "MLOps Level 0", "An acceptable production standard"],
+            answer: 2,
+            explanation: "Manual training, notebook-based handoffs, and infrequent retraining are hallmarks of MLOps Level 0. There is no pipeline automation, no experiment tracking, and no continuous retraining. This is a common starting point but creates significant operational risk — 6 months is a long time for fraud patterns to evolve without a model update."
+          },
+          {
+            q: "What is the purpose of the 'model evaluation gate' in an MLOps pipeline?",
+            options: [
+              "To prevent unauthorized users from accessing the model",
+              "To automatically compare the new model's performance against the current production model before promotion",
+              "To evaluate whether the training data is compliant with GDPR",
+              "To measure model latency in production"
+            ],
+            answer: 1,
+            explanation: "The evaluation gate compares the challenger model (just trained) against the champion model (current production) on a holdout dataset. If the challenger doesn't beat the champion on defined metrics, it's rejected. This prevents automatically deploying a worse model — a critical quality gate in automated pipelines."
+          },
+          {
+            q: "A credit card transaction must be approved or declined within 80ms. What inference pattern is required?",
+            options: ["Batch inference", "Online (real-time) inference", "Micro-batch inference", "Asynchronous inference"],
+            answer: 1,
+            explanation: "An 80ms SLA requires online (real-time) inference — the model is called via a synchronous API on each transaction as it occurs. Batch inference runs on schedules over large datasets and cannot meet sub-second latency requirements."
+          },
+          {
+            q: "After deployment, a mortgage approval model shows consistent predictions over 4 months, then the approval rate drops 15% with no model change. What should a TPM initiate?",
+            options: [
+              "Immediately roll back to the previous model version",
+              "Investigate for data drift — check whether input feature distributions have shifted since training",
+              "Retrain the model immediately with the same training data",
+              "Escalate to compliance as a potential system failure"
+            ],
+            answer: 1,
+            explanation: "An unexplained behavioral change with no code change is the classic symptom of data drift — the real-world data going into the model has shifted away from what it was trained on (e.g., interest rates changed, applicant demographics shifted post-COVID). The first step is diagnosing the drift before deciding to retrain, roll back, or escalate."
+          }
+        ]
+      },
+      {
+        id: "ai-governance-banking",
+        title: "AI Governance, Risk & Compliance in Banking",
+        duration: "10 min read",
+        content: `
+<h3>Why AI Governance is Different in Banking</h3>
+<p>Banks operate under strict regulatory frameworks that treat algorithmic decision-making as a first-class risk. A model that makes biased or unexplainable decisions in lending, fraud, or customer scoring exposes the institution to regulatory fines, reputational damage, and civil liability.</p>
+<p>As a TPM, you are the connective tissue between data science, engineering, legal, compliance, and the business. You need to know what governance gates exist and why they can't be skipped.</p>
+
+<h3>Key Regulatory Frameworks</h3>
+<ul>
+  <li><strong>Fair Lending (ECOA / Fair Housing Act):</strong> Models that influence credit decisions must not discriminate based on protected characteristics (race, sex, national origin, age, etc.). This includes <em>disparate impact</em> — unintentionally discriminatory outcomes even if protected features aren't used as inputs.</li>
+  <li><strong>SR 11-7 (Federal Reserve / OCC guidance):</strong> The U.S. banking regulator's model risk management guidance. Requires all models to have: independent validation, documented assumptions, ongoing monitoring, and a model inventory. If your AI touches a regulated decision, it's a "model" under SR 11-7.</li>
+  <li><strong>GDPR / CCPA:</strong> Automated decision-making using personal data requires transparency, and in some cases the right to a human review. Sending customer data to a third-party AI vendor for model training may require explicit consent and a Data Processing Agreement (DPA).</li>
+  <li><strong>EU AI Act:</strong> Classifies AI systems by risk level. Credit scoring and fraud detection are "high-risk" — requiring conformity assessments, transparency obligations, and human oversight before deployment.</li>
+</ul>
+
+<h3>Model Risk Management (MRM)</h3>
+<p>SR 11-7 defines a three-stage model governance lifecycle every TPM should know:</p>
+<ol>
+  <li><strong>Model Development:</strong> Data scientists build and document the model. Must include: purpose, methodology, assumptions, limitations, training data lineage, and performance benchmarks.</li>
+  <li><strong>Independent Model Validation:</strong> A separate team (not the model developers) challenges the model's design, data, performance, and risks. This gate can take weeks to months. TPMs must plan for it.</li>
+  <li><strong>Ongoing Monitoring:</strong> Post-deployment, the model is tracked for performance degradation, data drift, and continued alignment with its intended use. Results reported to a Model Risk Committee.</li>
+</ol>
+
+<h3>Guardrails: Technical and Process Controls</h3>
+<p>Guardrails are controls that prevent harmful or non-compliant AI behavior:</p>
+<ul>
+  <li><strong>Input filtering:</strong> Reject inputs that fall outside the model's intended operating range (e.g., flag loan applications with data quality issues before scoring).</li>
+  <li><strong>Output constraints:</strong> Cap or floor model outputs (e.g., a risk score cannot exceed 100; decisions below a confidence threshold escalate to a human).</li>
+  <li><strong>Fairness checks:</strong> Automated testing for disparate impact across demographic groups before and after deployment.</li>
+  <li><strong>Explainability:</strong> SHAP values or LIME to attribute model decisions to input features. Required for adverse action notices in lending ("your application was denied because your debt-to-income ratio was too high").</li>
+  <li><strong>Human-in-the-loop:</strong> For high-stakes or low-confidence decisions, route to a human reviewer instead of automating.</li>
+</ul>
+
+<h3>The Model Inventory</h3>
+<p>Every model in production must be registered in a model inventory — a catalog of all models with: owner, purpose, training data, validation status, deployment date, monitoring cadence, and next review date. TPMs often own keeping this inventory current.</p>
+
+<div class="tip"><strong>Interview tip:</strong> If asked "how do you govern AI at a bank?", lead with SR 11-7 and the three-stage MRM lifecycle. Show you understand that independent validation is non-negotiable and must be budgeted into every AI project timeline.</div>`,
+        takeaways: [
+          "SR 11-7 is the foundational U.S. banking regulation for model risk — requires independent validation, documentation, and monitoring for all decision models",
+          "Fair Lending applies to credit models — disparate impact (unintentional discrimination) is as legally significant as intentional bias",
+          "GDPR/CCPA restrict sending customer data to third-party AI vendors — always involve legal and compliance before vendor selection",
+          "Explainability (SHAP, LIME) is operationally required for adverse action notices — not just a nice-to-have",
+          "TPMs must budget time for Independent Model Validation (IMV) — it's a hard gate that cannot be compressed"
+        ],
+        resources: [
+          { type: "article", title: "SR 11-7 Model Risk Management Guidance", desc: "Federal Reserve's full model risk management guidance", url: "https://www.federalreserve.gov/supervisionreg/srletters/sr1107.htm" },
+          { type: "article", title: "EU AI Act Overview", desc: "High-level summary of the EU's AI regulatory framework", url: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" },
+          { type: "article", title: "SHAP Values Explained", desc: "Explainability for ML models using SHAP", url: "https://shap.readthedocs.io/en/latest/" },
+          { type: "article", title: "Fair Lending and Machine Learning", desc: "CFPB guidance on algorithmic lending decisions", url: "https://www.consumerfinance.gov/about-us/blog/innovation-in-fair-lending/" }
+        ],
+        quiz: [
+          {
+            q: "A bank's mortgage model does not use race as a feature, but analysis shows it approves a significantly lower percentage of Black applicants than white applicants with similar credit profiles. This is:",
+            options: [
+              "Acceptable — protected features aren't used, so there's no discrimination",
+              "Disparate impact — an illegal outcome even without intentional discrimination, violating Fair Lending",
+              "A data quality issue that should be reported to IT",
+              "A model accuracy problem to be resolved by the data science team"
+            ],
+            answer: 1,
+            explanation: "Disparate impact occurs when an algorithm produces discriminatory outcomes across protected groups even without using protected characteristics as inputs. Under ECOA and the Fair Housing Act, disparate impact is illegal regardless of intent. A bank discovered in violation faces CFPB enforcement action and private litigation."
+          },
+          {
+            q: "Under SR 11-7, who must perform model validation?",
+            options: [
+              "The data scientists who built the model",
+              "An independent team separate from the model developers",
+              "An external Big Four accounting firm",
+              "The business line that will use the model"
+            ],
+            answer: 1,
+            explanation: "SR 11-7 requires independent validation — the validation team must be organizationally separate from the model development team to avoid conflicts of interest. Having the model builders validate their own work is a regulatory finding (MRA — Matter Requiring Attention)."
+          },
+          {
+            q: "A TPM plans an 8-week sprint to build and deploy a new credit risk model. What critical milestone is likely missing from this plan?",
+            options: [
+              "A sprint retrospective",
+              "Independent Model Validation — a regulatory gate that typically takes 4–12 weeks and must follow development",
+              "UAT testing",
+              "Executive sign-off"
+            ],
+            answer: 1,
+            explanation: "Independent Model Validation (IMV) under SR 11-7 is a hard gate before production deployment for any credit model. It's performed by a separate team, typically takes 4–12 weeks, and cannot be run in parallel with development. An 8-week build plan that ignores IMV will either miss the go-live date or create a regulatory violation."
+          },
+          {
+            q: "A customer's loan application is denied by an AI model. Under U.S. Fair Lending law, what must the bank provide?",
+            options: [
+              "Nothing — AI decisions don't require explanation",
+              "The model's source code",
+              "An adverse action notice with specific reasons for the denial",
+              "A 30-day appeal window with a human review option"
+            ],
+            answer: 2,
+            explanation: "ECOA and Regulation B require an adverse action notice with specific reasons when credit is denied. For AI models, this means the bank must be able to explain what factors drove the decision (using SHAP or similar techniques). 'The algorithm decided' is not a legally sufficient reason."
+          }
+        ]
+      },
+      {
+        id: "ai-tpm-interview-playbook",
+        title: "AI TPM Interview Playbook",
+        duration: "8 min read",
+        content: `
+<h3>How Interviewers Assess AI Knowledge for TPMs</h3>
+<p>AI-focused TPM interviews test two things: (1) whether you understand the unique complexity of AI programs vs. software programs, and (2) whether you can drive AI initiatives cross-functionally — connecting data science, engineering, compliance, and product without technical blind spots.</p>
+
+<h3>Common Interview Questions and Strong Answers</h3>
+
+<h4>Q: "Walk me through how you'd run an AI/ML program from idea to production."</h4>
+<p><strong>Strong answer structure:</strong></p>
+<ol>
+  <li><strong>Problem framing</strong> — Define the specific problem, confirm ML is the right tool, establish baseline metric</li>
+  <li><strong>Data discovery</strong> — What data exists? Quality? Labeling needed? PII concerns? Feature store available?</li>
+  <li><strong>Experimentation</strong> — Data science team builds candidate models. Experiment tracking in MLflow/W&amp;B.</li>
+  <li><strong>Governance</strong> — Model card, independent validation (if regulated), fairness testing, legal/compliance review</li>
+  <li><strong>Deployment</strong> — MLOps pipeline, staging environment, shadow mode first if high-risk</li>
+  <li><strong>Monitoring &amp; iteration</strong> — Drift detection, business metric tracking, retraining cadence</li>
+</ol>
+
+<h4>Q: "How is managing an AI project different from managing a software project?"</h4>
+<p><strong>Key points to hit:</strong></p>
+<ul>
+  <li>Data is as much a dependency as code — data quality, availability, and labeling must be tracked like tasks</li>
+  <li>Experimentation is inherently uncertain — data scientists may try 10 approaches before finding one that works. Build that into your timeline with go/no-go decision points, not hard delivery dates for model accuracy.</li>
+  <li>Models degrade — deployment is not the end. Budget for ongoing monitoring, retraining, and a model ops team.</li>
+  <li>Governance gates (like Independent Model Validation) can add months. They are not negotiable in a regulated environment.</li>
+  <li>Two types of failure: software bugs (deterministic) vs. model failures (probabilistic — the model can be "working" and still wrong in harmful ways)</li>
+</ul>
+
+<h4>Q: "Tell me about a time an AI initiative failed or stalled. What did you do?"</h4>
+<p><strong>Use this structure:</strong> Situation → Root cause (data quality? model drift? governance surprise? stakeholder misalignment?) → Actions taken → Outcome + what you'd do differently</p>
+<p>Common root causes to reference: model validation took longer than planned, training data was discovered to have quality issues post-kickoff, business metric and model metric weren't aligned (model performed well on AUC but didn't move the business KPI).</p>
+
+<h4>Q: "How do you communicate AI risk to non-technical stakeholders?"</h4>
+<p><strong>Framework to use:</strong></p>
+<ul>
+  <li>Translate model uncertainty into business risk: "There's a 5% chance the model incorrectly classifies a fraudulent transaction — at our transaction volume, that's ~500 missed frauds per day, costing $X."</li>
+  <li>Use the traffic light model risk categories: Red (high-stakes, regulated, needs full validation), Yellow (medium-impact, needs monitoring), Green (low-risk, lightweight oversight)</li>
+  <li>Connect guardrails to outcomes they care about: "The fairness test before each deployment is what keeps us out of a CFPB consent order."</li>
+</ul>
+
+<h3>Key Terms to Use Naturally in an AI TPM Interview</h3>
+<ul>
+  <li><strong>Model drift / data drift</strong> — shows you understand post-deployment risk</li>
+  <li><strong>MLOps maturity level</strong> — shows systems thinking about AI operations</li>
+  <li><strong>Feature store</strong> — shows you understand data engineering dependencies</li>
+  <li><strong>Shadow mode / canary deployment</strong> — shows you know safe rollout patterns for AI</li>
+  <li><strong>SR 11-7 / Independent Model Validation</strong> — in banking, signals regulatory fluency</li>
+  <li><strong>SHAP / adverse action notice</strong> — shows you understand explainability requirements</li>
+  <li><strong>Champion/challenger</strong> — shows you know how production model upgrades work</li>
+</ul>
+
+<h3>Red Flags to Avoid</h3>
+<ul>
+  <li>Treating AI delivery like software delivery — "we'll have the model done in sprint 3" without accounting for experimentation uncertainty</li>
+  <li>Not mentioning governance or compliance when discussing a banking AI use case</li>
+  <li>Confusing AI/ML with automation or rules engines — know the distinction</li>
+  <li>Saying "the data scientists handle the model stuff" — you need to understand their work well enough to unblock and de-risk it</li>
+</ul>
+
+<div class="tip"><strong>Closing tip:</strong> End every AI program story with what you'd monitor and how you'd know if it was working. Interviewers want TPMs who think end-to-end — through deployment and into production operations.</div>`,
+        takeaways: [
+          "Frame AI programs in 6 stages: problem framing → data discovery → experimentation → governance → deployment → monitoring",
+          "AI differs from software: data is a dependency, experimentation is uncertain, models degrade, governance gates are hard stops",
+          "Translate model metrics to business risk when communicating with stakeholders — not AUC, but dollars and regulatory exposure",
+          "Use 'MLOps maturity level', 'model drift', 'feature store', and 'champion/challenger' naturally — they signal operational depth",
+          "Never omit governance and monitoring from an AI program story — it signals you understand the full lifecycle"
+        ],
+        resources: [
+          { type: "article", title: "The AI Product Manager's Handbook", desc: "Practical guide to managing AI/ML products", url: "https://www.svpg.com/the-ai-product-manager/" },
+          { type: "article", title: "Machine Learning Design Patterns", desc: "Google's ML design patterns for production systems", url: "https://developers.google.com/machine-learning/guides/rules-of-ml" },
+          { type: "video", title: "MLOps Maturity Model", desc: "Andrew Ng on MLOps and AI program management", url: "https://www.youtube.com/watch?v=06-AZXmwHjo" },
+          { type: "article", title: "Champion/Challenger Testing", desc: "How production model upgrades work safely", url: "https://towardsdatascience.com/champion-challenger-testing-for-machine-learning-models-89e5f3d64e5e" }
+        ],
+        quiz: [
+          {
+            q: "A business stakeholder asks when the AI model will hit 95% accuracy. What is the best TPM response?",
+            options: [
+              "Promise 95% accuracy by the end of Q3",
+              "Explain that accuracy targets in ML are set before training, not promised as outcomes — instead define a go/no-go threshold and a timeline to evaluate whether the model meets it",
+              "Tell them accuracy is a technical metric they shouldn't worry about",
+              "Ask the data scientists to guarantee 95% accuracy"
+            ],
+            answer: 1,
+            explanation: "Model performance cannot be promised in advance — it emerges from data quality, feature engineering, and algorithm choices. The right approach is to define a minimum performance threshold (the bar to clear for deployment), set a timeline for evaluation, and agree on what happens if the model doesn't meet the bar. This sets realistic expectations while giving the team a clear target."
+          },
+          {
+            q: "Which statement best shows AI program management maturity to an interviewer?",
+            options: [
+              "I let the data science team own the model work and I focus on the roadmap",
+              "I track model accuracy as a sprint metric like story points",
+              "I build data quality validation and independent model validation into the project plan as hard dependencies, not afterthoughts",
+              "I use Agile for the engineering work and waterfall for the model training"
+            ],
+            answer: 2,
+            explanation: "Mature AI program management means anticipating the dependencies unique to AI: data quality gates, labeling timelines, model validation requirements, and governance reviews. These are not afterthoughts — they are program milestones that gate the next phase. Showing you plan for them upfront demonstrates end-to-end AI program ownership."
+          },
+          {
+            q: "What does 'shadow mode' mean in the context of an AI model rollout?",
+            options: [
+              "Training the model on anonymized data only",
+              "Running the model in production where it generates predictions but users do not see the output — used to compare against the live system before full launch",
+              "A security mode that prevents unauthorized model access",
+              "Running the model only during off-peak hours"
+            ],
+            answer: 1,
+            explanation: "Shadow mode (also called dark launch) deploys the model to production against real traffic without exposing its outputs to users. The model's predictions are logged and compared to the existing system's behavior. This lets you validate production performance at scale, without any user impact if the model behaves unexpectedly."
+          },
+          {
+            q: "In a regulated banking context, a data science team says 'we can skip model validation — we're behind schedule.' What should the TPM do?",
+            options: [
+              "Agree — delivery date commitments to stakeholders take priority",
+              "Escalate to the Model Risk Committee and reset the timeline — SR 11-7 makes validation a non-negotiable regulatory requirement, not a project option",
+              "Suggest a lighter-weight self-validation to meet the timeline",
+              "Deploy to a limited user segment first to reduce risk"
+            ],
+            answer: 1,
+            explanation: "Under SR 11-7, independent model validation is a regulatory requirement for models used in regulated decisions — not a project option the team can waive. Skipping it and deploying creates regulatory risk for the institution (MRA, MRA+ findings from examiners). The TPM's job is to protect the program from this risk by resetting expectations with stakeholders, not enabling the shortcut."
+          }
+        ]
+      }
+    ]
   }
 ];
