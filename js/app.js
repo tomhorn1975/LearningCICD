@@ -1,6 +1,11 @@
 // ── State ─────────────────────────────────────────────────────────────────────
 const STATE_KEY = 'cicd_learning_hub';
 
+// ── Adaptive State ────────────────────────────────────────────────────────────
+let adaptiveLesson         = null;   // current AI-generated lesson object
+let currentIsAdaptive      = false;  // true when in adaptive lesson/quiz/results
+let adaptiveError          = '';     // error message from fetch
+
 function loadState() {
   try { return JSON.parse(localStorage.getItem(STATE_KEY)) || {}; }
   catch { return {}; }
@@ -53,6 +58,12 @@ function render() {
     root.innerHTML = renderQuizView();
   } else if (currentView === 'results') {
     root.innerHTML = renderResultsView();
+  } else if (currentView === 'adaptive-loading') {
+    root.innerHTML = renderAdaptiveLoading();
+  } else if (currentView === 'adaptive-lesson') {
+    root.innerHTML = renderAdaptiveLessonView();
+  } else if (currentView === 'adaptive-error') {
+    root.innerHTML = renderAdaptiveError();
   }
 }
 
@@ -290,11 +301,26 @@ function startQuiz() {
   currentView = 'quiz';
   const module = CURRICULUM.find(m => m.id === currentModule);
   const lesson = module?.lessons.find(l => l.id === currentLesson);
+  const questions = lesson.quiz;
   currentQuizState = {
-    questions: lesson.quiz,
+    questions,
     current: 0,
-    answers: new Array(lesson.quiz.length).fill(null),
-    revealed: new Array(lesson.quiz.length).fill(false)
+    answers: new Array(questions.length).fill(null),
+    revealed: new Array(questions.length).fill(false)
+  };
+  render();
+}
+
+function startAdaptiveQuiz() {
+  if (!adaptiveLesson) return;
+  currentIsAdaptive = true;
+  currentView = 'quiz';
+  const questions = adaptiveLesson.quiz;
+  currentQuizState = {
+    questions,
+    current: 0,
+    answers: new Array(questions.length).fill(null),
+    revealed: new Array(questions.length).fill(false)
   };
   render();
 }
@@ -336,19 +362,28 @@ function renderQuizView() {
     ? `<button class="btn btn-primary" onclick="${isLast ? 'submitQuiz()' : 'nextQuestion()'}">${isLast ? 'See Results' : 'Next Question →'}</button>`
     : `<button class="btn btn-primary" onclick="revealAnswer()" ${!answered ? 'disabled style="opacity:.5;cursor:not-allowed"' : ''}>Check Answer</button>`;
 
+  const quizTitle    = currentIsAdaptive ? adaptiveLesson?.title : lesson?.title;
+  const quizBreadcrumb = currentIsAdaptive
+    ? `<a onclick="navigate('dashboard')">Dashboard</a>
+       <span class="breadcrumb-sep">›</span>
+       <a onclick="navigate('module','${module?.id}')">${module?.title}</a>
+       <span class="breadcrumb-sep">›</span>
+       <a onclick="navigate('adaptive-lesson')">Adaptive Lesson</a>
+       <span class="breadcrumb-sep">›</span>
+       <span>Quiz</span>`
+    : `<a onclick="navigate('dashboard')">Dashboard</a>
+       <span class="breadcrumb-sep">›</span>
+       <a onclick="navigate('module','${module?.id}')">${module?.title}</a>
+       <span class="breadcrumb-sep">›</span>
+       <a onclick="navigate('lesson','${module?.id}','${lesson?.id}')">${lesson?.title}</a>
+       <span class="breadcrumb-sep">›</span>
+       <span>Quiz</span>`;
+
   return `
-    <div class="breadcrumb">
-      <a onclick="navigate('dashboard')">Dashboard</a>
-      <span class="breadcrumb-sep">›</span>
-      <a onclick="navigate('module','${module.id}')">${module.title}</a>
-      <span class="breadcrumb-sep">›</span>
-      <a onclick="navigate('lesson','${module.id}','${lesson.id}')">${lesson.title}</a>
-      <span class="breadcrumb-sep">›</span>
-      <span>Quiz</span>
-    </div>
+    <div class="breadcrumb">${quizBreadcrumb}</div>
     <div class="quiz-wrap">
       <div class="quiz-header">
-        <div class="quiz-header-title">${lesson.title} — Quiz</div>
+        <div class="quiz-header-title">${quizTitle} — Quiz</div>
         <div class="quiz-header-sub">Question ${qs.current + 1} of ${qs.questions.length}</div>
         <div class="quiz-progress-bar">
           <div class="quiz-progress-fill" style="width:${pct}%"></div>
@@ -387,23 +422,32 @@ function submitQuiz() {
   const qs = currentQuizState;
   const correct = qs.answers.filter((a, i) => a === qs.questions[i].answer).length;
   const score = Math.round((correct / qs.questions.length) * 100);
-  const ls = getLessonState(currentLesson);
-  const status = score >= 80 ? 'complete' : 'needs-review';
-  setLessonState(currentLesson, {
-    status,
-    score,
-    attempts: (ls.attempts || 0) + 1,
-    lastAttempt: Date.now(),
-    lastAnswers: qs.answers
-  });
+
+  if (currentIsAdaptive) {
+    // Save adaptive quiz score
+    const store = getAdaptiveStore();
+    if (store[currentModule]) {
+      store[currentModule].quizScore = score;
+      store[currentModule].quizStatus = score >= 80 ? 'complete' : 'needs-review';
+      saveAdaptiveStore(store);
+    }
+  } else {
+    const ls = getLessonState(currentLesson);
+    const status = score >= 80 ? 'complete' : 'needs-review';
+    setLessonState(currentLesson, {
+      status,
+      score,
+      attempts: (ls.attempts || 0) + 1,
+      lastAttempt: Date.now(),
+      lastAnswers: qs.answers
+    });
+  }
   currentView = 'results';
   render();
 }
 
 // ── Results View ──────────────────────────────────────────────────────────────
 function renderResultsView() {
-  const module = CURRICULUM.find(m => m.id === currentModule);
-  const lesson = module?.lessons.find(l => l.id === currentLesson);
   if (!currentQuizState) return '';
 
   const qs = currentQuizState;
@@ -412,27 +456,62 @@ function renderResultsView() {
   const pass = score >= 80;
   const ok = score >= 60;
 
-  let ringClass = pass ? 'ring-pass' : ok ? 'ring-ok' : 'ring-fail';
-  let resultTitle = pass ? 'Excellent Work!' : ok ? 'Good Effort' : 'Keep Practicing';
-  let resultSub = pass
+  const ringClass   = pass ? 'ring-pass' : ok ? 'ring-ok' : 'ring-fail';
+  const resultTitle = pass ? 'Excellent Work!' : ok ? 'Good Effort' : 'Keep Practicing';
+  const resultSub   = pass
     ? `You scored ${score}% — lesson marked as complete.`
     : ok
       ? `You scored ${score}% — review the material and try again when ready.`
-      : `You scored ${score}% — this topic needs more review. Re-read the lesson content and try again.`;
+      : `You scored ${score}% — this topic needs more review. Re-read the content and try again.`;
 
   const reviewItems = qs.questions.map((q, i) => {
-    const correct_ans = qs.answers[i] === q.answer;
+    const isCorrect = qs.answers[i] === q.answer;
     return `
-      <div style="background:${correct_ans ? '#f0fdf4' : '#fef2f2'};border:1px solid ${correct_ans ? '#bbf7d0' : '#fecaca'};border-radius:8px;padding:14px 16px;margin-bottom:10px;">
-        <div style="font-size:13px;font-weight:600;color:${correct_ans ? '#166534' : '#991b1b'};margin-bottom:6px;">
-          ${correct_ans ? '✓ Correct' : '✗ Incorrect'} — Q${i + 1}
+      <div style="background:${isCorrect ? '#f0fdf4' : '#fef2f2'};border:1px solid ${isCorrect ? '#bbf7d0' : '#fecaca'};border-radius:8px;padding:14px 16px;margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:600;color:${isCorrect ? '#166534' : '#991b1b'};margin-bottom:6px;">
+          ${isCorrect ? '✓ Correct' : '✗ Incorrect'} — Q${i + 1}
         </div>
         <div style="font-size:14px;font-weight:600;margin-bottom:6px;">${q.q}</div>
-        ${!correct_ans ? `<div style="font-size:13px;color:#6b7280;margin-bottom:4px;">Your answer: <em>${q.options[qs.answers[i]] || 'No answer'}</em></div>
+        ${!isCorrect ? `<div style="font-size:13px;color:#6b7280;margin-bottom:4px;">Your answer: <em>${q.options[qs.answers[i]] || 'No answer'}</em></div>
         <div style="font-size:13px;color:#166534;">Correct: <em>${q.options[q.answer]}</em></div>` : ''}
-        <div style="font-size:13px;color:#374151;margin-top:8px;padding-top:8px;border-top:1px solid ${correct_ans ? '#bbf7d0' : '#fecaca'}">${q.explanation}</div>
+        <div style="font-size:13px;color:#374151;margin-top:8px;padding-top:8px;border-top:1px solid ${isCorrect ? '#bbf7d0' : '#fecaca'}">${q.explanation}</div>
       </div>`;
   }).join('');
+
+  // ── Adaptive lesson results ──────────────────────────────────────────────
+  if (currentIsAdaptive) {
+    const mod = CURRICULUM.find(m => m.id === currentModule);
+    return `
+      <div class="breadcrumb">
+        <a onclick="navigate('dashboard')">Dashboard</a>
+        <span class="breadcrumb-sep">›</span>
+        <a onclick="navigate('module','${mod?.id}')">${mod?.title}</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Adaptive Lesson Results</span>
+      </div>
+      <div class="quiz-wrap">
+        <div class="results-hero">
+          <div class="results-score-ring ${ringClass}">${score}%</div>
+          <div class="results-title">${resultTitle}</div>
+          <div class="results-subtitle">${resultSub}</div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="startAdaptiveQuiz()">🔄 Retake Quiz</button>
+            <button class="btn btn-outline btn-sm" onclick="navigate('adaptive-lesson')">📖 Re-read Lesson</button>
+            <button class="btn btn-outline btn-sm" onclick="navigate('module','${mod?.id}')">← Module Overview</button>
+          </div>
+          ${pass ? '' : `
+          <div style="margin-top:16px;">
+            <button class="btn btn-success" onclick="startContinueLearning('${mod?.id}')">↺ Generate a New Lesson</button>
+          </div>`}
+        </div>
+        <div class="section-title" style="margin-top:24px;">Question Review</div>
+        ${reviewItems}
+      </div>`;
+  }
+
+  // ── Regular lesson results ───────────────────────────────────────────────
+  const module = CURRICULUM.find(m => m.id === currentModule);
+  const lesson = module?.lessons.find(l => l.id === currentLesson);
 
   const resourcesHTML = lesson.resources.map(r => `
     <div class="resource-item">
@@ -444,7 +523,7 @@ function renderResultsView() {
       <a class="resource-link" href="${r.url}" target="_blank" rel="noopener">Open →</a>
     </div>`).join('');
 
-  // Next lesson suggestion
+  // Next lesson (within same module or next module)
   const allLessons = getAllLessons();
   const currentIdx = allLessons.findIndex(l => l.id === currentLesson);
   const nextLesson = allLessons[currentIdx + 1];
@@ -452,6 +531,11 @@ function renderResultsView() {
     <button class="btn btn-success" style="margin-top:8px;" onclick="navigate('lesson','${nextLesson.moduleId}','${nextLesson.id}')">
       Next: ${nextLesson.title} →
     </button>` : '';
+
+  // Module complete prompt (shown when all lessons in module are done)
+  const moduleCompleteHTML = isModuleAllComplete(module.id)
+    ? renderModuleCompletePrompt(module.id)
+    : '';
 
   return `
     <div class="breadcrumb">
@@ -473,6 +557,8 @@ function renderResultsView() {
         </div>
         ${nextHTML}
       </div>
+
+      ${moduleCompleteHTML}
 
       <div class="section-title" style="margin-top:24px;">Question Review</div>
       ${reviewItems}
@@ -512,17 +598,27 @@ function renderResultsResourcesView() {
     <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="navigate('lesson','${module.id}','${lesson.id}')">← Back to Lesson</button>`;
 }
 
-// Patch navigate to handle resources view
+// Patch navigate to handle resources and adaptive views
 const _origNavigate = navigate;
 window.navigate = function(view, moduleId, lessonId) {
+  // Reset adaptive mode when leaving adaptive views
+  if (!['adaptive-lesson', 'adaptive-loading', 'adaptive-error', 'quiz', 'results'].includes(view)) {
+    currentIsAdaptive = false;
+  }
+
   currentView = view;
-  currentModule = moduleId || null;
+  currentModule = moduleId || currentModule || null;
   currentLesson = lessonId || null;
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('btn-' + view);
   if (btn) btn.classList.add('active');
+
   if (view === 'results_resources') {
     document.getElementById('root').innerHTML = renderResultsResourcesView();
+    return;
+  }
+  if (view === 'adaptive-lesson') {
+    document.getElementById('root').innerHTML = renderAdaptiveLessonView();
     return;
   }
   render();
