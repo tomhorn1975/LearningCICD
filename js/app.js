@@ -218,6 +218,10 @@ function renderModuleView() {
       </div>`;
   }).join('');
 
+  const moduleCompleteHTML = isModuleAllComplete(module.id)
+    ? renderModuleCompletePrompt(module.id)
+    : '';
+
   return `
     <div class="breadcrumb">
       <a onclick="navigate('dashboard')">Dashboard</a>
@@ -232,7 +236,8 @@ function renderModuleView() {
         <div style="margin-top:10px;font-size:13px;opacity:.75;">${prog.done}/${prog.total} lessons complete · ${prog.pct}%</div>
       </div>
     </div>
-    <div class="lesson-list">${lessonsHTML}</div>`;
+    <div class="lesson-list">${lessonsHTML}</div>
+    ${moduleCompleteHTML}`;
 }
 
 // ── Lesson View ───────────────────────────────────────────────────────────────
@@ -681,7 +686,16 @@ function renderProgress() {
   }).join('');
 
   return `
-    <div class="section-title">📊 My Learning Progress</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <div class="section-title" style="margin-bottom:0;">📊 My Learning Progress</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="exportProgress()">⬇ Export Progress</button>
+        <label class="btn btn-outline btn-sm" style="cursor:pointer;margin:0;">
+          ⬆ Import Progress
+          <input type="file" accept=".json" style="display:none;" onchange="importProgress(event)">
+        </label>
+      </div>
+    </div>
     <div class="stats-row" style="margin-bottom:24px;">
       <div class="stat-card">
         <div class="stat-value">${completed}/${total}</div>
@@ -706,6 +720,47 @@ function renderProgress() {
     <div style="margin-top:24px;text-align:center;">
       <button class="btn btn-outline btn-sm" onclick="if(confirm('Reset all progress? This cannot be undone.')) { localStorage.removeItem('${STATE_KEY}'); state={}; navigate('dashboard'); }">Reset Progress</button>
     </div>`;
+}
+
+// ── Export / Import Progress ──────────────────────────────────────────────────
+function exportProgress() {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    state: JSON.parse(localStorage.getItem(STATE_KEY) || '{}'),
+    adaptiveStore: JSON.parse(localStorage.getItem(ADAPTIVE_STORE) || '{}')
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cicd-progress-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.state) { alert('Invalid progress file.'); return; }
+      if (!confirm('This will replace your current progress. Continue?')) return;
+      localStorage.setItem(STATE_KEY, JSON.stringify(data.state));
+      state = data.state;
+      if (data.adaptiveStore) {
+        localStorage.setItem('cicd_adaptive_lessons', JSON.stringify(data.adaptiveStore));
+      }
+      navigate('progress');
+      alert('Progress imported successfully!');
+    } catch {
+      alert('Could not read the file. Make sure it is a valid progress export.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────

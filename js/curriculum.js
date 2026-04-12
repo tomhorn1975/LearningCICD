@@ -1947,5 +1947,551 @@ fortify-sast:
         ]
       }
     ]
+  },
+  {
+    id: "gaig-stpm-interview",
+    title: "GAIG Strategic TPM Interview Prep",
+    icon: "🎯",
+    desc: "Interview prep for the GAIG Strategic Technical Product Manager — AI & Automation, P&C Insurance. Technology, leadership, strategy, and mock questions.",
+    lessons: [
+      {
+        id: "gaig-tech-ai-automation",
+        title: "Technology: AI & Automation for Personal Productivity",
+        duration: "12 min read",
+        content: `
+<h3>The Role's Technology Domain</h3>
+<p>This role sits in Great American Insurance Company's P&amp;C IT organization, specifically within the <strong>AI &amp; Automation domain focused on Personal Productivity products</strong>. That means your technology fluency needs to span three areas: AI/ML capabilities, process automation tooling, and the software delivery frameworks the team uses.</p>
+
+<h3>Types of Automation You'll Own</h3>
+<ul>
+  <li><strong>Robotic Process Automation (RPA)</strong> — Software bots that mimic human actions in UIs (clicking, copying, form-filling). Tools: UiPath, Automation Anywhere, Blue Prism. Best for high-volume, rule-based, stable processes. Low code, fast time-to-value.</li>
+  <li><strong>Intelligent Automation (IA)</strong> — RPA enhanced with AI capabilities: OCR for document processing, NLP for unstructured text, ML for decision logic. Handles exceptions that RPA alone can't.</li>
+  <li><strong>Generative AI Copilots</strong> — LLM-powered assistants (Microsoft Copilot, GitHub Copilot, custom GPT wrappers) that augment knowledge workers. This is the "personal productivity" hot zone right now — drafting, summarizing, researching, coding assistance.</li>
+  <li><strong>Workflow Orchestration</strong> — Platforms like Power Automate, ServiceNow, or custom orchestration layers that connect systems and route work without human handoffs.</li>
+</ul>
+
+<h3>Process Design Documentation (PDD) and Solution Design Documentation (SDD)</h3>
+<p>GAIG specifically lists PDD/SDD familiarity as a preferred qualification. These are standard artifacts in automation programs:</p>
+<ul>
+  <li><strong>PDD (Process Design Document)</strong> — Captures the AS-IS business process in detail before automation: steps, decision points, systems touched, volumes, exceptions, data inputs/outputs. Written collaboratively with the business. Think of it as the business's blueprint.</li>
+  <li><strong>SDD (Solution Design Document)</strong> — Translates the PDD into the technical implementation: how the bot/AI will replicate each step, architecture, exception handling logic, integration points. Written by the technical team from the PDD.</li>
+</ul>
+<div class="tip"><strong>Interview angle:</strong> Be ready to explain how you've used or governed these artifacts. Example: "I ensured every automation went through a PDD review gate before we committed dev resources — it surfaced process complexity early and prevented scope creep."</div>
+
+<h3>Extreme Programming (XP)</h3>
+<p>GAIG lists XP as a preferred development framework. XP is an Agile methodology focused on technical excellence and fast feedback loops. Key practices:</p>
+<ul>
+  <li><strong>Pair Programming</strong> — Two developers work at one workstation; reduces defects, spreads knowledge</li>
+  <li><strong>Test-Driven Development (TDD)</strong> — Write the test before the code; forces clear requirements</li>
+  <li><strong>Continuous Integration</strong> — Small, frequent code integrations to a shared branch; prevents integration hell</li>
+  <li><strong>Refactoring</strong> — Continuously improving code design without changing behavior</li>
+  <li><strong>Short Iterations (1-2 weeks)</strong> — Deliver working software frequently; adapt to changing requirements</li>
+  <li><strong>On-Site Customer</strong> — Product owner or business rep is embedded and available continuously</li>
+</ul>
+<p>As a TPM, XP means you're expected to be a deeply embedded "on-site customer" — not a distant stakeholder — available to answer questions, clarify requirements, and make prioritization decisions in real time.</p>
+
+<h3>Lean Methodology</h3>
+<p>Lean (from Toyota Production System) applied to software/product work means eliminating waste and maximizing value flow. The seven wastes in software:</p>
+<ol>
+  <li>Partially done work (WIP sitting idle)</li>
+  <li>Extra features (building what wasn't asked for)</li>
+  <li>Relearning (poor documentation or knowledge transfer)</li>
+  <li>Handoffs (each transfer adds delay and information loss)</li>
+  <li>Task switching (context switching kills focus)</li>
+  <li>Delays (waiting for approvals, environments, decisions)</li>
+  <li>Defects (bugs found late cost exponentially more)</li>
+</ol>
+<p>Lean certification signals you can identify and systematically remove these wastes from the delivery pipeline — a key TPM skill when managing AI/automation product backlogs.</p>
+
+<h3>User-Centered Design (UCD) for AI Products</h3>
+<p>Personal productivity AI products fail when built around what's technically possible, not what users actually need. UCD in this context means:</p>
+<ul>
+  <li><strong>Discovery</strong> — Shadow users doing the actual work; identify pain points and cognitive load</li>
+  <li><strong>Persona development</strong> — Underwriter vs. claims adjuster vs. IT analyst have very different productivity bottlenecks</li>
+  <li><strong>Prototype testing</strong> — Low-fidelity mockups before dev investment; AI copilot workflows especially benefit from early usability testing</li>
+  <li><strong>Adoption metrics</strong> — Daily active use, feature utilization rates, time-saved per task. An AI tool no one uses delivered zero ROI.</li>
+</ul>
+
+<h3>AI Trends Relevant to P&C Insurance</h3>
+<p>GAIG wants someone who monitors AI trends. Be ready to speak to:</p>
+<ul>
+  <li><strong>Agentic AI</strong> — AI systems that take multi-step actions autonomously (not just answering questions). Relevant for automating complex claims workflows.</li>
+  <li><strong>RAG (Retrieval-Augmented Generation)</strong> — LLMs grounded in company-specific documents (policy forms, underwriting guidelines). Enables accurate internal copilots without hallucination risk.</li>
+  <li><strong>AI governance and responsible AI</strong> — Model risk, bias detection, explainability. Insurance is heavily regulated; AI decisions touching policyholders face scrutiny.</li>
+  <li><strong>Microsoft 365 Copilot ecosystem</strong> — The dominant enterprise personal productivity AI platform. GAIG likely uses M365; know the Copilot capabilities and limitations.</li>
+</ul>`,
+        takeaways: [
+          "RPA automates rule-based UI tasks; IA adds AI for exceptions; GenAI copilots augment knowledge work",
+          "PDD = business blueprint of AS-IS process; SDD = technical implementation plan derived from PDD",
+          "XP means you're an embedded, always-available product voice — not a distant stakeholder",
+          "Lean = identify and eliminate the 7 wastes; Lean certification signals systematic thinking",
+          "AI adoption for personal productivity lives or dies on usage metrics — build for behavior change, not feature delivery"
+        ],
+        resources: [
+          { type: "article", title: "UiPath PDD Template Guide", desc: "Standard format for Process Design Documentation in RPA programs", url: "https://docs.uipath.com/" },
+          { type: "article", title: "Extreme Programming Explained", desc: "Kent Beck's XP values and practices overview", url: "https://www.agilealliance.org/glossary/xp/" },
+          { type: "article", title: "Microsoft 365 Copilot Overview", desc: "Capabilities and use cases for the leading enterprise productivity AI", url: "https://adoption.microsoft.com/en-us/copilot/" },
+          { type: "book", title: "Lean Software Development", desc: "Poppendieck — applying Toyota's lean principles to software", url: "https://www.oreilly.com/library/view/lean-software-development/0321150783/" }
+        ],
+        quiz: [
+          {
+            q: "GAIG lists PDD familiarity as a preferred qualification. What does a PDD capture?",
+            options: [
+              "The technical architecture of the automation solution",
+              "The AS-IS business process in detail: steps, decisions, systems, volumes, and exceptions",
+              "The project plan and resource allocation for the automation build",
+              "The test cases and acceptance criteria for the automation"
+            ],
+            answer: 1,
+            explanation: "A Process Design Document (PDD) captures the current-state business process from the business's perspective — before any automation design. It documents each step, decision point, system touchpoints, data inputs/outputs, and exception scenarios. The SDD (Solution Design Document) then translates this into the technical implementation plan."
+          },
+          {
+            q: "In Extreme Programming (XP), what is the TPM's equivalent of the 'on-site customer' role?",
+            options: [
+              "Attending sprint reviews at the end of each iteration",
+              "Writing detailed requirements documents before development begins",
+              "Being continuously available to clarify requirements, answer questions, and make real-time prioritization decisions alongside the team",
+              "Serving as the final approver for production deployments"
+            ],
+            answer: 2,
+            explanation: "XP's 'on-site customer' concept means the product voice is embedded with the team — not a distant stakeholder who responds to email in 2 days. For a TPM, this means being available in real time to make decisions, unblock the team, and refine requirements as questions arise during development."
+          },
+          {
+            q: "Your team ships an AI personal productivity copilot on time and on budget. Six weeks later, adoption is 8%. What is the most likely root cause?",
+            options: [
+              "The CI/CD pipeline had insufficient test coverage",
+              "The product was not designed around actual user workflows and pain points",
+              "The sprint velocity was too high during development",
+              "The PDD was not reviewed before development started"
+            ],
+            answer: 1,
+            explanation: "Low adoption of AI productivity tools almost always traces back to user-centered design failures — the tool was built around what was technically possible or what the sponsor wanted, not around how target users actually work and where they feel the most pain. Technical delivery quality rarely explains adoption gaps."
+          },
+          {
+            q: "A business stakeholder asks you to skip the PDD and move straight to building the automation because 'we know the process well.' What should you do?",
+            options: [
+              "Agree — the stakeholder knows their process best",
+              "Insist on a full PDD to avoid any process discovery",
+              "Propose a lightweight, time-boxed PDD workshop to document critical steps and exceptions — it surfaces hidden complexity and protects the build timeline",
+              "Escalate to the project sponsor immediately"
+            ],
+            answer: 2,
+            explanation: "Skipping the PDD is one of the most common reasons automation projects go over budget — teams discover mid-build that the 'simple' process has 40 exception scenarios no one mentioned. A lightweight, time-boxed PDD workshop (not weeks of documentation) gives you the upside (risk reduction) without the stakeholder's concern about delay."
+          },
+          {
+            q: "Which AI capability is most relevant for building a GAIG-specific internal copilot that answers questions about underwriting guidelines accurately?",
+            options: [
+              "Reinforcement Learning from Human Feedback (RLHF)",
+              "Retrieval-Augmented Generation (RAG)",
+              "Robotic Process Automation (RPA)",
+              "Shadow mode deployment"
+            ],
+            answer: 1,
+            explanation: "RAG (Retrieval-Augmented Generation) grounds an LLM in a specific document corpus — in this case, GAIG's underwriting guidelines, policy forms, and procedures. This prevents hallucination by having the model retrieve and cite actual source documents rather than generating answers from training data alone. It's the standard architecture for accurate enterprise knowledge copilots."
+          }
+        ]
+      },
+      {
+        id: "gaig-leadership",
+        title: "Leadership: Stakeholders, AI Champions & Vision Communication",
+        duration: "10 min read",
+        content: `
+<h3>The Leadership Landscape at GAIG</h3>
+<p>This role requires leading without always having direct authority. You're coordinating across P&amp;C IT leadership, business stakeholders, UX designers, delivery leads, and a network of AI champions — while potentially managing direct reports. That's a wide leadership surface. Let's break it down.</p>
+
+<h3>AI Champions Networks</h3>
+<p>GAIG specifically mentions "collaborating with AI champions." An AI champions network is a distributed model for scaling AI adoption across a large organization:</p>
+<ul>
+  <li><strong>What they are</strong> — Business-embedded volunteers or designated roles who bridge the AI team and their department. They surface automation opportunities, champion adoption, and provide feedback from the ground level.</li>
+  <li><strong>What you owe them</strong> — Clear prioritization decisions, early access to roadmap updates, feedback loops showing their ideas were heard, and enablement (training, tools, talking points for their teams).</li>
+  <li><strong>What they owe you</strong> — Opportunity pipelines, adoption metrics from their area, real-world process context your central team lacks.</li>
+  <li><strong>Managing the relationship</strong> — Champions are rarely your direct reports. You lead them through influence: making it easy for them to succeed, recognizing their wins publicly, and protecting their time by not over-complicating the intake process.</li>
+</ul>
+<div class="tip"><strong>Interview answer hook:</strong> "I treat AI champions as embedded product scouts — they have context I can't get from a requirements doc. My job is to make their feedback loop frictionless and show them their input shaped actual roadmap decisions."</div>
+
+<h3>Stakeholder Prioritization Under Uncertainty</h3>
+<p>AI automation roadmaps involve more uncertainty than traditional software. Prioritization frameworks need to account for this:</p>
+<ul>
+  <li><strong>RICE scoring</strong> — Reach × Impact × Confidence ÷ Effort. The Confidence dimension explicitly penalizes low-certainty AI bets.</li>
+  <li><strong>MoSCoW</strong> — Must Have / Should Have / Could Have / Won't Have. Useful for stakeholder alignment conversations — forces explicit trade-offs rather than "everything is priority 1."</li>
+  <li><strong>Opportunity scoring (Jobs-to-be-Done)</strong> — Importance minus Satisfaction. High importance + low satisfaction = prime automation candidate.</li>
+  <li><strong>Portfolio balance</strong> — Balance quick wins (RPA for high-volume, simple processes) against strategic bets (GenAI copilots). Quick wins fund the budget and buy credibility for bigger bets.</li>
+</ul>
+
+<h3>Communicating Vision and Progress to Executives</h3>
+<p>The role explicitly calls out communicating vision and progress across the organization. At GAIG this likely means P&amp;C IT leadership and business unit executives. Key principles:</p>
+<ul>
+  <li><strong>Outcome-first, not feature-first</strong> — Executives care about what changed, not what shipped. "Claims adjusters save 45 minutes per complex claim" lands better than "we deployed the document extraction module."</li>
+  <li><strong>Honest about uncertainty</strong> — AI product outcomes are genuinely hard to predict. Credibility comes from being upfront about what you know vs. what you're learning, not from false precision on ROI projections.</li>
+  <li><strong>Consistent cadence</strong> — Regular, brief updates (monthly roadmap newsletter, quarterly business reviews) beat ad-hoc communication. Stakeholders who feel informed don't escalate as often.</li>
+  <li><strong>Stakeholder-specific framing</strong> — Finance wants cost avoidance and FTE reallocation numbers. Operations wants cycle time and error rate. IT wants platform stability and maintainability. Same roadmap, different lens.</li>
+</ul>
+
+<h3>Partnering with Delivery Leaders</h3>
+<p>The role calls out specifically "partnering with delivery leaders on feature and capability timelines." This is the classic product/engineering tension:</p>
+<ul>
+  <li><strong>Your job</strong> — Provide clear, stable priorities and acceptance criteria. Change your mind about priorities infrequently and never mid-sprint.</li>
+  <li><strong>Their job</strong> — Estimate effort honestly, flag technical risks early, not let scope creep in silently.</li>
+  <li><strong>Shared job</strong> — Negotiate trade-offs transparently. "We can do X in 3 weeks or X + Y in 5 weeks — given the business deadline, which do you recommend?" is a healthy conversation. "When will X be done?" is not.</li>
+  <li><strong>Timeline commitments</strong> — For AI features, avoid hard date commitments for capability milestones (model accuracy is emergent). Commit to delivery of testable increments instead.</li>
+</ul>
+
+<h3>Managing Performance and Talent</h3>
+<p>GAIG notes this role may include staff performance management. Even if you're not there yet, frame your leadership experience around:</p>
+<ul>
+  <li><strong>Clarity over control</strong> — The best thing you do for direct reports is make the success criteria unambiguous. People disengage when they don't know what winning looks like.</li>
+  <li><strong>Coaching through ambiguity</strong> — AI product work is ambiguous by nature. Teach your team to make and log decisions when they lack information, rather than waiting for certainty.</li>
+  <li><strong>Psychological safety</strong> — AI experiments fail. A team that hides failures gives you no signal. Create an environment where failed experiments are documented and shared as learning.</li>
+</ul>`,
+        takeaways: [
+          "AI champions are distributed product scouts — lead them through frictionless feedback loops, not authority",
+          "RICE scoring accounts for confidence, which is critical for AI bets with uncertain outcomes",
+          "Communicate outcomes (time saved, error rate) to executives, not feature lists",
+          "For delivery partnerships, commit to testable increments — not hard dates for emergent AI capabilities",
+          "Psychological safety is a prerequisite for AI product work — failures are data, not failures"
+        ],
+        resources: [
+          { type: "article", title: "RICE Scoring Prioritization", desc: "Intercom's original RICE framework with confidence dimension", url: "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/" },
+          { type: "book", title: "Influence Without Authority", desc: "Cohen & Bradford — leading cross-functional stakeholders without direct power", url: "https://www.wiley.com/en-us/Influence+Without+Authority%2C+3rd+Edition-p-9781119697299" },
+          { type: "article", title: "Building an AI Champions Network", desc: "Pattern for scaling AI adoption through distributed business advocates", url: "https://hbr.org/2023/02/how-to-build-an-internal-ai-champion-network" }
+        ],
+        quiz: [
+          {
+            q: "An AI champion from the Underwriting department tells you their team's idea was never included in the roadmap and they're losing motivation. What is the most important thing to address?",
+            options: [
+              "Guarantee their next idea will be on the roadmap",
+              "Close the feedback loop — show them explicitly how their input was evaluated, why it was or wasn't prioritized, and what would change the decision",
+              "Invite them to sprint reviews going forward",
+              "Escalate their idea to the steering committee"
+            ],
+            answer: 1,
+            explanation: "Champions disengage when they feel their input disappears into a black box. You don't have to say yes to every idea — but you must close the loop: 'Here's what you submitted, here's how we scored it, here's what it would take to move it up.' That transparency maintains trust even when the answer is no."
+          },
+          {
+            q: "A P&C business executive asks for a hard delivery date for a GenAI summarization feature. Engineering says the accuracy target is uncertain. What do you commit to?",
+            options: [
+              "The date engineering estimates with a buffer added",
+              "A date by which you will have a testable prototype with defined accuracy metrics, and a checkpoint to reassess the path to production",
+              "No date — AI features cannot be scheduled",
+              "The feature with a reduced accuracy target to hit the executive's preferred date"
+            ],
+            answer: 1,
+            explanation: "Committing to a testable increment with defined evaluation criteria is honest and actionable — it gives the business something to plan around without setting a false expectation. Hard date commitments for GenAI accuracy targets almost always get missed because model performance is emergent. A prototype-and-checkpoint approach is the standard professional response."
+          },
+          {
+            q: "You have 3 automation opportunities. Opportunity A: RICE score 420, confidence 90%. Opportunity B: RICE score 680, confidence 35%. Opportunity C: RICE score 380, confidence 95%. How should you frame this to the steering committee?",
+            options: [
+              "Prioritize B — it has the highest score",
+              "Prioritize C — it has the highest confidence",
+              "Recommend A and C as near-term delivery given high confidence; position B as a strategic bet requiring an experiment/validation phase before full investment",
+              "Reject B entirely — low confidence automations should never be pursued"
+            ],
+            answer: 2,
+            explanation: "A and C are execution bets — high confidence, solid scores, can be committed to a roadmap. B is a strategic bet — highest potential but low confidence means you don't yet know if it's achievable. The right framing is a time-boxed validation phase for B (e.g., a 6-week spike) to increase confidence before committing full resources. This balances portfolio risk and demonstrates strategic thinking."
+          },
+          {
+            q: "Your delivery lead tells you a feature will take 6 weeks. The business sponsor says they need it in 3 weeks. What is the correct next step?",
+            options: [
+              "Tell the sponsor it will be 6 weeks",
+              "Tell the delivery lead to find a way to do it in 3 weeks",
+              "Facilitate a trade-off conversation: identify what scope could be cut to hit 3 weeks, what risk that creates, and let the sponsor make an informed decision",
+              "Split the feature into two releases without informing the sponsor"
+            ],
+            answer: 2,
+            explanation: "The TPM's job in this moment is to make the trade-off explicit and transparent, not to pick a side. 'Here's what we can deliver in 3 weeks, here's what we'd defer, here's the quality or capability risk — what do you prefer?' gives the sponsor agency and protects the team from being forced into a quality-compromised commitment."
+          }
+        ]
+      },
+      {
+        id: "gaig-strategy",
+        title: "Strategy: Roadmapping, Business-Tech Alignment & P&C Context",
+        duration: "11 min read",
+        content: `
+<h3>Strategic Product Management in an Insurance AI Context</h3>
+<p>Strategy for a TPM means answering: <em>What should we build, in what order, and why does it matter to the business?</em> At GAIG, this has a specific shape: you're operating in a P&amp;C insurance company, within an AI &amp; Automation domain, with a mandate to improve personal productivity. That constrains and focuses your strategy in specific ways.</p>
+
+<h3>Understanding P&C Insurance — What You Need to Know</h3>
+<p>Property &amp; Casualty (P&amp;C) insurance covers property damage and liability (auto, home, commercial, specialty). GAIG operates in commercial specialty lines. Key processes where AI/automation drives value:</p>
+<ul>
+  <li><strong>Underwriting</strong> — Assessing risk and setting premium. High document volume, complex data from multiple sources. AI use cases: document ingestion, risk scoring assistance, submission triage.</li>
+  <li><strong>Claims Processing</strong> — Intake, investigation, settlement. Repetitive data entry, document classification, fraud detection signals.</li>
+  <li><strong>Policy Administration</strong> — Endorsements, renewals, cancellations. Rule-based, high-volume. Classic RPA territory.</li>
+  <li><strong>Actuarial &amp; Analytics</strong> — Data preparation, model monitoring, reporting. Automation accelerates turnaround.</li>
+  <li><strong>Compliance &amp; Audit</strong> — Documentation, regulatory reporting. Automation reduces human error risk.</li>
+</ul>
+<div class="tip"><strong>Interview hook:</strong> "In P&C, the highest-value AI productivity wins tend to cluster around document-heavy, judgment-intensive workflows — underwriting submission review and complex claims — because that's where experienced people spend the most time on low-value data extraction rather than the actual judgment work they were hired to do."</div>
+
+<h3>Building a Product Roadmap for AI/Automation</h3>
+<p>A roadmap for an AI personal productivity portfolio is different from a traditional feature roadmap. Key principles:</p>
+<ul>
+  <li><strong>Horizon planning</strong> — Organize by confidence and time horizon:
+    <ul>
+      <li><em>Now (0-3 months)</em> — Committed, high-confidence delivery. Specific features with defined acceptance criteria.</li>
+      <li><em>Next (3-9 months)</em> — Directional, validated through discovery. Problem statements, not solutions.</li>
+      <li><em>Later (9+ months)</em> — Strategic bets tied to business goals. Subject to change as learning accumulates.</li>
+    </ul>
+  </li>
+  <li><strong>Outcome-based themes</strong> — Roadmap themes should be business outcomes ("Reduce underwriter document handling time by 30%"), not technology deliverables ("Deploy AI document extraction module").</li>
+  <li><strong>Quick wins vs. strategic bets</strong> — Balance is critical. Pure quick-win portfolios deliver value but no differentiation. Pure strategic bets drain credibility before they prove value.</li>
+  <li><strong>Dependency mapping</strong> — AI products often depend on data infrastructure, model training, and change management. Show these dependencies on the roadmap so the business sees the full picture.</li>
+</ul>
+
+<h3>Aligning Business Objectives with Technical Innovation</h3>
+<p>This is explicitly listed in the job description as a core responsibility. The alignment failure modes to avoid:</p>
+<ul>
+  <li><strong>Tech-push failure</strong> — "We have this cool AI capability, now let's find a use case." Results in solutions looking for problems, low adoption, and wasted investment.</li>
+  <li><strong>Business-pull paralysis</strong> — "The business wants 47 different automations." Without technical strategy and prioritization, you build a portfolio of low-impact, high-maintenance point solutions.</li>
+  <li><strong>The alignment approach</strong> — Start with the business's annual goals and OKRs. Map each goal to productivity bottlenecks. Score automation/AI opportunities against that bottleneck map. Now your roadmap is provably connected to business strategy.</li>
+</ul>
+
+<h3>Performance Metrics for AI Productivity Products</h3>
+<p>GAIG lists "analyzing performance metrics to optimize product outcomes" as a key responsibility. Know these metrics cold:</p>
+<ul>
+  <li><strong>Adoption metrics</strong> — Daily/weekly active users, feature utilization rate, user retention (did they come back after first use?)</li>
+  <li><strong>Efficiency metrics</strong> — Time-per-task before vs. after, tasks automated per period, exception rate (% of cases the AI couldn't handle)</li>
+  <li><strong>Quality metrics</strong> — Accuracy/error rate of AI outputs, human override rate (high override = low AI confidence or poor UX), rework rate</li>
+  <li><strong>Business impact metrics</strong> — FTE hours reclaimed, cost avoidance, throughput increase (policies processed, claims closed per analyst)</li>
+  <li><strong>Health metrics</strong> — Bot/model uptime, queue depth, SLA compliance for automated processes</li>
+</ul>
+<p>The most important metric combination: <strong>adoption + efficiency</strong>. A tool that is used daily AND saves measurable time is unambiguously successful. A tool that is used daily but saves no time has a design problem. A tool that saves time in testing but isn't used in production has an adoption problem.</p>
+
+<h3>Monitoring AI Trends — What GAIG Is Watching</h3>
+<p>The role calls out monitoring AI trends. The trends most relevant to a P&C personal productivity TPM in 2025-2026:</p>
+<ul>
+  <li><strong>Agentic workflows</strong> — AI agents that execute multi-step tasks with minimal human intervention. Emerging from copilot-style tools toward fully automated workflows.</li>
+  <li><strong>Multimodal AI</strong> — Models that process documents, images, and structured data together. Highly relevant for claims (photos, PDFs, structured incident data).</li>
+  <li><strong>AI governance regulation</strong> — NAIC model bulletin on AI in insurance (2023), state-level AI transparency requirements. As a TPM in insurance, you're not just tracking AI capabilities — you're tracking the regulatory guardrails.</li>
+  <li><strong>Microsoft Copilot maturity</strong> — GAIG likely runs M365. The Copilot Wave 2 capabilities (agents, connectors to internal data) directly affect your personal productivity roadmap.</li>
+  <li><strong>Total Cost of AI Ownership</strong> — LLM API costs, fine-tuning, RAG infrastructure, model monitoring. AI products have cost curves unlike traditional software — token costs scale with usage in ways that require active management.</li>
+</ul>`,
+        takeaways: [
+          "P&C insurance AI value concentrates in document-heavy, judgment-intensive workflows: underwriting and complex claims",
+          "Roadmap themes should be business outcomes, not technology deliverables — connect every item to a business goal",
+          "Alignment failure modes: tech-push (solution looking for problem) and business-pull paralysis (47 disconnected point solutions)",
+          "Track adoption + efficiency together — a product used but saving no time has a design problem; saving time but unused has an adoption problem",
+          "Insurance AI is regulated — track NAIC guidance and state AI transparency requirements alongside capability trends"
+        ],
+        resources: [
+          { type: "article", title: "NAIC Model Bulletin: Use of AI in Insurance", desc: "Regulatory framework for AI use in insurance underwriting and claims", url: "https://content.naic.org/sites/default/files/inline-files/2023-12-model-bulletin-AI.pdf" },
+          { type: "article", title: "Outcome-Based Product Roadmaps", desc: "Shifting from feature roadmaps to outcome-based themes", url: "https://www.producttalk.org/2023/10/outcome-based-roadmaps/" },
+          { type: "article", title: "Great American Insurance Company Overview", desc: "GAIG corporate overview — P&C specialty lines focus areas", url: "https://www.greatamericaninsurancegroup.com/about" }
+        ],
+        quiz: [
+          {
+            q: "GAIG's underwriting team says they want an AI tool but can't describe the specific problem. What is your first step?",
+            options: [
+              "Propose a GenAI copilot pilot based on industry benchmarks",
+              "Conduct process shadowing sessions to observe where underwriters actually spend time and identify specific friction points",
+              "Survey the team with a feature request form",
+              "Build a prototype and show it to the team to generate feedback"
+            ],
+            answer: 1,
+            explanation: "When stakeholders want 'AI' without a clear problem statement, the discovery work is to observe the actual workflow. Process shadowing (sitting alongside underwriters doing real work) surfaces specific, high-frequency pain points that stakeholders wouldn't articulate in a meeting. This grounds your roadmap in real user behavior, not aspiration."
+          },
+          {
+            q: "Your AI personal productivity portfolio has 12 automation items. The P&C business unit president asks: 'How does this connect to our goal of improving underwriter retention?' What is the strongest answer?",
+            options: [
+              "It improves efficiency which indirectly supports retention",
+              "Map specific portfolio items to the underwriter workflow friction points cited in the last engagement survey, and quantify the hours reclaimed for experienced underwriters",
+              "AI automation generally improves employee satisfaction",
+              "Schedule a follow-up to research this connection"
+            ],
+            answer: 1,
+            explanation: "The strongest strategic answer is a direct, specific link: 'Items 3, 7, and 9 on our roadmap target the document triage and data re-entry tasks that your last engagement survey flagged as the top frustration for senior underwriters. Eliminating those tasks frees roughly 6 hours/week per person for the judgment work they want to do.' Specific connection to specific data wins executive conversations."
+          },
+          {
+            q: "Six months post-launch, your AI claims summarization tool has 78% daily adoption but the 'hours saved per claim' metric has not improved. What does this indicate?",
+            options: [
+              "The adoption metric is being measured incorrectly",
+              "The AI accuracy is too low for production use",
+              "The tool is being used but not changing behavior — likely a design or workflow integration problem, not an AI quality problem",
+              "Claims adjusters are using the tool incorrectly and need more training"
+            ],
+            answer: 2,
+            explanation: "High adoption + zero efficiency gain is a classic design/integration problem. Adjusters are opening the tool (adoption) but either not trusting the summaries, re-doing the work manually, or the tool isn't integrated at the point in the workflow where the time is actually lost. This diagnosis points to workflow redesign and UX work, not model improvement."
+          },
+          {
+            q: "A technology vendor presents an impressive agentic AI demo that could automate complex claims intake. How do you evaluate whether to add it to the roadmap?",
+            options: [
+              "Pilot it immediately — agentic AI is a competitive advantage",
+              "Evaluate it against: the specific workflow problem it solves, current process maturity (is the process stable enough to automate?), regulatory implications for AI in claims decisions, total cost of ownership, and integration complexity",
+              "Wait for the technology to be more mature before evaluating",
+              "Ask the claims team if they like it"
+            ],
+            answer: 1,
+            explanation: "Emerging technology evaluation for an insurance TPM requires multiple lenses: Does it solve a real, prioritized problem? Is the underlying process stable enough to automate? What are the regulatory implications (NAIC AI guidance)? What does it actually cost at scale (token/API costs)? How complex is the integration? A compelling demo doesn't answer any of these questions — structured evaluation does."
+          }
+        ]
+      },
+      {
+        id: "gaig-interview-questions",
+        title: "Mock Interview: Questions & STAR Frameworks",
+        duration: "15 min read",
+        content: `
+<h3>How to Use This Lesson</h3>
+<p>For each question below, a strong answer framework is provided. Practice saying your answer out loud — interview performance is a skill, not just knowledge. Use the <strong>STAR format</strong> for behavioral questions: <em>Situation → Task → Action → Result</em>. For strategic and technical questions, structure as <em>Framing → Approach → Trade-offs → Recommendation</em>.</p>
+
+<h3>Behavioral Questions — Leadership</h3>
+
+<p><strong>Q1: "Tell me about a time you had to align stakeholders who disagreed on product priorities."</strong></p>
+<p><em>What they're testing:</em> Influence without authority, structured prioritization, political navigation.</p>
+<p><em>Strong answer structure:</em></p>
+<ul>
+  <li><strong>S:</strong> Describe a real stakeholder conflict with tangible stakes — different departments, competing priorities, timeline pressure</li>
+  <li><strong>T:</strong> Your job was to reach a decision that the business could execute against — not a compromise that pleased no one</li>
+  <li><strong>A:</strong> Introduce an objective scoring framework (RICE, value vs. effort matrix). Surface each stakeholder's underlying goal, not just their stated preference. Find the shared outcome.</li>
+  <li><strong>R:</strong> A decision was made, documented, and the team could move. Stakeholders understood why even if they weren't 100% happy. Quantify if possible.</li>
+</ul>
+
+<p><strong>Q2: "Describe how you've built relationships with technical teams to ensure product delivery."</strong></p>
+<p><em>What they're testing:</em> Technical credibility, delivery partnership, not being a "just tell engineering what to do" PM.</p>
+<p><em>Strong answer hooks:</em> "I make it a priority to understand the technical constraints before I commit to stakeholders." / "I bring engineers into the problem-framing stage, not just the solution execution." / "I track delivery metrics myself so I can have informed conversations about risk, not just ask for status."</p>
+
+<p><strong>Q3: "Tell me about a time an AI or automation initiative failed to achieve its intended outcome. What did you do?"</strong></p>
+<p><em>What they're testing:</em> Intellectual honesty, learning orientation, failure response.</p>
+<p><em>Strong answer structure:</em></p>
+<ul>
+  <li>Describe a real failure — don't pick a "failure that was actually a success." Interviewers see through that.</li>
+  <li>Be specific about what the failure metric was (adoption, accuracy, ROI)</li>
+  <li>Describe your diagnostic process — how did you determine root cause vs. symptoms?</li>
+  <li>Describe what changed as a result — in the product AND in your process going forward</li>
+</ul>
+
+<h3>Behavioral Questions — Strategy</h3>
+
+<p><strong>Q4: "How do you build a product roadmap? Walk me through your process."</strong></p>
+<p><em>Strong answer structure:</em></p>
+<ol>
+  <li>Start with business goals and OKRs — roadmap must connect to strategy, not just to requests</li>
+  <li>Map goals to user workflow pain points through discovery (shadowing, interviews, data)</li>
+  <li>Score opportunities against a consistent framework (RICE or equivalent)</li>
+  <li>Sequence by confidence horizon: Now/Next/Later</li>
+  <li>Review with stakeholders for input; make final calls transparent and documented</li>
+  <li>Communicate outcome-based themes, not feature lists</li>
+  <li>Revisit quarterly; treat the roadmap as a living hypothesis, not a commitment calendar</li>
+</ol>
+
+<p><strong>Q5: "How do you decide which automation opportunities to pursue and which to pass on?"</strong></p>
+<p><em>Strong answer framework:</em></p>
+<ul>
+  <li><strong>Volume &amp; frequency</strong> — Is this task done often enough to justify the build cost?</li>
+  <li><strong>Process stability</strong> — Is the process stable and documented? Automating an unstable process bakes in the wrong behavior.</li>
+  <li><strong>Exception rate</strong> — What % of cases have exceptions? High exception rates make automation brittle.</li>
+  <li><strong>Data availability</strong> — Do we have the inputs the automation needs in a structured, accessible form?</li>
+  <li><strong>Regulatory sensitivity</strong> — Does this automation touch a decision that regulators scrutinize (underwriting, claims settlement)?</li>
+  <li><strong>Strategic alignment</strong> — Does automating this free capacity for the work the business wants to grow?</li>
+</ul>
+
+<h3>Technical Questions</h3>
+
+<p><strong>Q6: "What's your understanding of how generative AI differs from traditional RPA, and when would you use each?"</strong></p>
+<p><em>Strong answer:</em></p>
+<ul>
+  <li><strong>RPA</strong> — Rules-based, deterministic, operates on structured UI/data. Best for: high-volume, stable, rule-based processes with minimal exceptions. Predictable cost, fast time-to-value. Fragile to UI changes.</li>
+  <li><strong>GenAI / LLMs</strong> — Probabilistic, handles unstructured language and context. Best for: document understanding, drafting, summarization, answering questions from large knowledge bases. Higher per-use cost, requires accuracy validation, needs hallucination mitigation.</li>
+  <li><strong>When to use each:</strong> RPA for "do exactly this sequence every time." GenAI for "interpret this document and produce a structured output." Increasingly, the most powerful solutions combine both — GenAI handles the unstructured ingestion layer, RPA or APIs handle the downstream system actions.</li>
+</ul>
+
+<p><strong>Q7: "How would you measure the success of an AI personal productivity program?"</strong></p>
+<p><em>Strong answer — use a tiered metrics framework:</em></p>
+<ul>
+  <li><strong>Adoption tier:</strong> DAU/WAU, new user activation rate, feature utilization breadth</li>
+  <li><strong>Efficiency tier:</strong> Time-per-task delta, tasks automated per period, exception/override rate</li>
+  <li><strong>Impact tier:</strong> FTE hours reclaimed, throughput increase, error rate reduction, cost avoidance</li>
+  <li><strong>Health tier:</strong> System uptime, SLA compliance, model accuracy drift monitoring</li>
+  <li><em>"I wouldn't report just one metric — the combination tells the story. High adoption + high efficiency + business impact is unambiguous success. Any two without the third tells you where the gap is."</em></li>
+</ul>
+
+<h3>Company &amp; Role-Specific Questions</h3>
+
+<p><strong>Q8: "Why Great American Insurance Company specifically?"</strong></p>
+<p><em>Strong answer hooks:</em></p>
+<ul>
+  <li>GAIG's focus on specialty commercial P&C lines creates unique, complex AI use cases — not just commodity automation</li>
+  <li>The AI &amp; Automation domain is a strategic investment area, not a legacy IT function — signals genuine commitment to transformation</li>
+  <li>The AI champions model shows GAIG is thinking about adoption and cultural change, not just technology delivery</li>
+  <li>American Financial Group's financial strength and GAIG's specialty expertise create a stable platform for long-term AI product development</li>
+</ul>
+
+<p><strong>Q9: "What would you do in your first 90 days in this role?"</strong></p>
+<p><em>Strong answer — 30/60/90 framework:</em></p>
+<ul>
+  <li><strong>Days 1-30 — Listen and learn:</strong> Shadow the AI champions network, review existing roadmap and backlog, understand current automation portfolio status, meet every key stakeholder, read the P&C IT strategy. Do not propose changes yet.</li>
+  <li><strong>Days 31-60 — Diagnose and validate:</strong> Identify gaps between current roadmap and business goals, assess metrics baseline, understand delivery team capacity and constraints, find the quick wins no one has gotten to yet.</li>
+  <li><strong>Days 61-90 — Propose and align:</strong> Present an initial roadmap update with explicit rationale, establish a recurring stakeholder communication rhythm, set up the metrics dashboard, and make one visible forward-progress decision to establish credibility.</li>
+</ul>
+
+<p><strong>Q10: "This role requires minimum 6 years of Technical Product Management. How has your experience prepared you for the AI &amp; Automation domain specifically?"</strong></p>
+<p><em>Structure:</em> Connect each prior role directly to the three capability domains GAIG cares about: (1) technical depth in AI/automation, (2) stakeholder leadership at scale, (3) strategic roadmapping in ambiguous environments. Be specific with metrics and outcomes from prior work. Explicitly bridge your experience to the P&C insurance context even if you haven't worked in insurance before.</p>
+
+<h3>Questions to Ask Your Interviewers</h3>
+<p>Strong candidates ask thoughtful questions. Use these:</p>
+<ul>
+  <li>"What does the AI champions network look like today — how many champions, how active, and what's working or not working?"</li>
+  <li>"What's the current state of the personal productivity portfolio — are there products in production, or is this greenfield?"</li>
+  <li>"How does the AI &amp; Automation team interface with the broader P&C IT organization — are you embedded in the business units or centralized?"</li>
+  <li>"What does success look like for this role at 12 months — what would make you say 'we made exactly the right hire'?"</li>
+  <li>"How does GAIG think about AI governance and responsible AI for tools that touch policyholder-related decisions?"</li>
+</ul>`,
+        takeaways: [
+          "Use STAR for behavioral questions — be specific with metrics and outcomes, not vague with 'I helped improve collaboration'",
+          "Strategic questions want your framework, not just your conclusion — show how you think, not just what you decided",
+          "For 'why GAIG' — connect to specialty P&C complexity, the AI champions model, and genuine transformation ambition",
+          "30/60/90: first 30 days listen only; days 31-60 diagnose; days 61-90 propose and make one visible decision",
+          "Ask questions that show you've done the research — AI champions status, portfolio maturity, and success metrics reveal whether this is a real strategic role"
+        ],
+        resources: [
+          { type: "article", title: "STAR Method for Product Manager Interviews", desc: "Structured behavioral answer framework with PM-specific examples", url: "https://www.productschool.com/blog/product-management-2/interview/star-method-product-manager-interview/" },
+          { type: "article", title: "Great American Insurance Group", desc: "GAIG corporate website — review their specialty lines, financial strength, and strategic priorities", url: "https://www.greatamericaninsurancegroup.com/" },
+          { type: "article", title: "TPM Interview Prep: Strategy Questions", desc: "Common strategic TPM interview questions with frameworks", url: "https://www.lennysnewsletter.com/p/how-to-get-a-product-manager-job" }
+        ],
+        quiz: [
+          {
+            q: "An interviewer asks: 'Tell me about a time your product failed to meet its goals.' You have a real example where AI accuracy was lower than expected. What is the best opening sentence?",
+            options: [
+              "'We almost failed but ultimately succeeded when we pivoted the approach.'",
+              "'In my last role, we launched an AI document classification tool targeting 92% accuracy. At launch, production accuracy was 74% — a significant miss.'",
+              "'Failure is a learning opportunity. In one project, we learned a lot about AI limitations.'",
+              "'This hasn't happened to me, but hypothetically I would...'"
+            ],
+            answer: 1,
+            explanation: "The strongest behavioral answers open with a crisp, specific statement of the situation and the failure metric — not a hedge, not a reframe, not a hypothetical. Interviewers are evaluating your intellectual honesty and whether you can be direct about hard outcomes. Lead with the specific miss, then show your diagnosis and response."
+          },
+          {
+            q: "An interviewer asks why you want to work at GAIG specifically. Which answer is strongest?",
+            options: [
+              "'GAIG is a great company with a strong reputation in the insurance industry.'",
+              "'I've been looking for a TPM role in a financial services company, and GAIG's size seemed like a good fit for my experience level.'",
+              "'GAIG's specialty P&C focus creates genuinely complex AI use cases — underwriting and claims work that commodity automation can't address. The AI champions model tells me GAIG is thinking about adoption seriously, not just technology delivery. I want to work on a transformation program that has both strategic intent and organizational design behind it.'",
+              "'I live near Cincinnati and the hybrid schedule works well for my family situation.'"
+            ],
+            answer: 2,
+            explanation: "The strongest 'why this company' answer demonstrates research, connects to what makes the role genuinely interesting, and signals alignment between your professional values and the company's approach. Mentioning the AI champions model specifically shows you read the job description carefully and understand what it signals about the company's maturity in AI transformation."
+          },
+          {
+            q: "In your first 30 days at GAIG, a senior business stakeholder asks you to immediately revamp the automation prioritization process. What do you do?",
+            options: [
+              "Begin redesigning the process immediately — this is exactly the kind of initiative you were hired for",
+              "Decline — it's too early to make changes",
+              "Acknowledge the feedback, schedule time to understand their specific concerns and the current process deeply, and commit to addressing it in your roadmap proposal at day 60-90",
+              "Escalate to your manager for guidance"
+            ],
+            answer: 2,
+            explanation: "In the first 30 days, your job is to listen and learn — not to make changes. But you also can't dismiss a senior stakeholder. The right move is to take the feedback seriously, invest in deeply understanding both the current process and their concern, and then bring a thoughtful proposal when you have enough context to not create new problems while solving the original one. Acting immediately in the first 30 days without full context is a common new-leader mistake."
+          },
+          {
+            q: "An interviewer asks: 'How do you measure success for an AI personal productivity program?' You have 60 seconds. What is the structure of your answer?",
+            options: [
+              "Focus on a single headline metric — simplicity is more memorable",
+              "Describe the tiered metrics framework: adoption (are people using it?), efficiency (is it saving time?), business impact (is it moving the KPIs that matter?), and health (is it running reliably?) — and explain that no single metric tells the whole story",
+              "Say that success metrics should be defined by the business stakeholders, not the product team",
+              "Cite the DORA metrics as the industry standard for measuring AI program performance"
+            ],
+            answer: 1,
+            explanation: "A tiered metrics framework demonstrates strategic thinking — you're not just measuring activity, you're measuring whether the product is actually delivering value at each layer. The key insight that 'no single metric tells the whole story' shows you've seen the failure modes (high adoption, no efficiency gain = design problem; high efficiency in testing, zero adoption = change management problem). DORA metrics are for CI/CD delivery pipelines, not AI product performance."
+          }
+        ]
+      }
+    ]
   }
 ];
