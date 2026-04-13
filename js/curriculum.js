@@ -514,10 +514,11 @@ fortify-sast:
   stage: security
   script:
     - sourceanalyzer -b $CI_PROJECT_NAME -scan
-    - BIRTReportGenerator     # Generate report
+    - ReportGenerator -format pdf -f report.pdf -source results.fpr
   artifacts:
     paths:
-      - "*.fpr"              # Fortify results file
+      - "*.fpr"              # Fortify results file (upload to Fortify SSC)
+      - "report.pdf"         # Human-readable report
   rules:
     - if: $CI_COMMIT_BRANCH == "main"  # Only on main branch
 </code></pre>`,

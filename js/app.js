@@ -147,12 +147,15 @@ function renderDashboard() {
 
   const modulesHTML = CURRICULUM.map(m => {
     const prog = moduleProgress(m);
+    const advBadge = m.isAdvanced
+      ? `<span style="font-size:10px;font-weight:700;background:#f3e8ff;color:#6b21a8;padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:middle;">ADVANCED</span>`
+      : '';
     return `
-      <div class="module-card" onclick="navigate('module','${m.id}')">
+      <div class="module-card${m.isAdvanced ? ' module-card-advanced' : ''}" onclick="navigate('module','${m.id}')">
         <div class="module-card-header">
           <div class="module-icon">${m.icon}</div>
           <div>
-            <div class="module-title">${m.title}</div>
+            <div class="module-title">${m.title}${advBadge}</div>
             <div class="module-desc">${m.desc}</div>
           </div>
         </div>
@@ -306,9 +309,11 @@ function startQuiz() {
   currentView = 'quiz';
   const module = CURRICULUM.find(m => m.id === currentModule);
   const lesson = module?.lessons.find(l => l.id === currentLesson);
-  const questions = lesson.quiz;
+  // Use adaptive questions: mastered questions are swapped for harder cached replacements
+  const questions = buildAdaptiveQuestions(lesson.id, lesson.quiz);
   currentQuizState = {
     questions,
+    baseQuestions: lesson.quiz,   // always the originals, used for mastery processing
     current: 0,
     answers: new Array(questions.length).fill(null),
     revealed: new Array(questions.length).fill(false)
@@ -384,6 +389,10 @@ function renderQuizView() {
        <span class="breadcrumb-sep">›</span>
        <span>Quiz</span>`;
 
+  const upgradedBadge = q._isReplacement
+    ? `<span style="display:inline-block;background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle;">⬆ Harder Question</span>`
+    : '';
+
   return `
     <div class="breadcrumb">${quizBreadcrumb}</div>
     <div class="quiz-wrap">
@@ -395,7 +404,7 @@ function renderQuizView() {
         </div>
       </div>
       <div class="question-card">
-        <div class="question-num">Question ${qs.current + 1}</div>
+        <div class="question-num">Question ${qs.current + 1}${upgradedBadge}</div>
         <div class="question-text">${q.q}</div>
         <div class="options">${optionsHTML}</div>
         ${explanationHTML}
@@ -446,6 +455,8 @@ function submitQuiz() {
       lastAttempt: Date.now(),
       lastAnswers: qs.answers
     });
+    // Track per-question mastery and kick off background replacement fetches
+    processQuizMastery(currentLesson, qs.questions, qs.answers);
   }
   currentView = 'results';
   render();
@@ -765,6 +776,7 @@ function importProgress(event) {
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  initAdvancedModules();   // load any saved advanced modules into CURRICULUM
   document.getElementById('btn-dashboard').classList.add('active');
   render();
 });

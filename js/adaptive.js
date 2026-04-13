@@ -1,7 +1,13 @@
 // ── Adaptive Learning System ──────────────────────────────────────────────────
 
-const ADAPTIVE_API_KEY  = 'cicd_adaptive_api_key';
-const ADAPTIVE_STORE    = 'cicd_adaptive_lessons';
+const ADAPTIVE_API_KEY      = 'cicd_adaptive_api_key';
+const ADAPTIVE_STORE        = 'cicd_adaptive_lessons';
+const MASTERY_STORE         = 'cicd_question_mastery';
+const REPLACEMENT_STORE     = 'cicd_replacement_qs';
+const ADVANCED_MOD_STORE    = 'cicd_advanced_modules';
+
+// Track which module is currently being generated (null = none)
+let generatingAdvancedModule = null;
 
 function getApiKey()      { return localStorage.getItem(ADAPTIVE_API_KEY) || ''; }
 function setApiKey(k)     { localStorage.setItem(ADAPTIVE_API_KEY, k); }
@@ -156,39 +162,69 @@ function saveApiKeyAndRefresh() {
 }
 
 function renderModuleCompletePrompt(moduleId) {
-  const mod      = CURRICULUM.find(m => m.id === moduleId);
-  const avg      = getModuleAvgScore(moduleId);
-  const isAdv    = avg >= 80;
-  const store    = getAdaptiveStore();
-  const existing = store[moduleId];
-  const hasKey   = !!getApiKey();
+  const mod        = CURRICULUM.find(m => m.id === moduleId);
+  const avg        = getModuleAvgScore(moduleId);
+  const isAdv      = avg >= 80;
+  const store      = getAdaptiveStore();
+  const existing   = store[moduleId];
+  const hasKey     = !!getApiKey();
+  const advStored  = getStoredAdvancedModule(moduleId);
+  const advInCurr  = CURRICULUM.find(c => c.id === `adv-${moduleId}`);
+  const isGenAdv   = generatingAdvancedModule === moduleId;
 
   const levelBadge = isAdv
     ? `<span style="background:#dcfce7;color:#166534;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;">Advanced Track</span>`
     : `<span style="background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;">Foundations Review</span>`;
 
-  let actionHTML;
+  // ── Adaptive lesson section ──
+  let adaptiveHTML;
   if (existing) {
-    actionHTML = `
+    adaptiveHTML = `
       <p style="font-size:14px;color:var(--muted);margin:12px 0;">You have a saved adaptive lesson for this module.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-success" onclick="resumeAdaptiveLesson('${moduleId}')">📖 Continue Saved Lesson</button>
         <button class="btn btn-outline btn-sm" onclick="startContinueLearning('${moduleId}')">↺ Generate New Lesson</button>
       </div>`;
   } else if (!hasKey) {
-    actionHTML = renderApiKeySetup();
+    adaptiveHTML = renderApiKeySetup();
   } else {
-    actionHTML = `
+    adaptiveHTML = `
       <p style="font-size:14px;color:var(--muted);margin:12px 0;">
-        ${isAdv
-          ? `Great scores! Ready to go deeper with advanced material?`
-          : `Let's reinforce the fundamentals with targeted content based on your results.`}
+        ${isAdv ? 'Great scores! Ready to go deeper with advanced material?' : "Let's reinforce the fundamentals with targeted content based on your results."}
       </p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-success" onclick="startContinueLearning('${moduleId}')">
           ${isAdv ? '🚀 Yes, Fetch Advanced Content' : '📚 Yes, Help Me Learn the Basics'}
         </button>
         <button class="btn btn-outline" onclick="navigate('module','${moduleId}')">No Thanks</button>
+      </div>`;
+  }
+
+  // ── Advanced module section ──
+  let advModHTML = '';
+  if (advInCurr) {
+    // Already unlocked — link to it
+    advModHTML = `
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:18px;margin-top:16px;text-align:center;">
+        <div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:6px;">🎓 Advanced Module Unlocked</div>
+        <p style="font-size:13px;color:#4b5563;margin-bottom:12px;">"${advInCurr.title}" is available in your curriculum.</p>
+        <button class="btn btn-success btn-sm" onclick="navigate('module','${advInCurr.id}')">Go to Advanced Module →</button>
+      </div>`;
+  } else if (isGenAdv) {
+    advModHTML = `
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:18px;margin-top:16px;text-align:center;">
+        <div style="font-size:28px;display:inline-block;animation:spin 1.2s linear infinite;">⚙</div>
+        <div style="font-size:14px;font-weight:700;color:#1d4ed8;margin-top:8px;">Generating Advanced Module…</div>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Creating two new lessons tailored to your progress. This takes a moment.</p>
+      </div>`;
+  } else if (hasKey) {
+    advModHTML = `
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:18px;margin-top:16px;text-align:center;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:6px;">🎓 Unlock an Advanced Module</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+          Generate a permanent 2-lesson advanced module for <strong>${mod.title}</strong> that will appear in your dashboard curriculum.
+        </p>
+        <button class="btn btn-primary btn-sm" onclick="startGenerateAdvancedModule('${moduleId}')">Generate Advanced Module</button>
       </div>`;
   }
 
@@ -204,7 +240,8 @@ function renderModuleCompletePrompt(moduleId) {
         <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Would you like to continue learning?</div>
       </div>
       <div style="color:var(--text);">
-        ${actionHTML}
+        ${adaptiveHTML}
+        ${advModHTML}
       </div>
     </div>`;
 }
@@ -233,6 +270,242 @@ function renderAdaptiveError() {
       <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="navigate('dashboard')">← Back to Dashboard</button>
     </div>`;
 }
+
+// ── Question Mastery Tracking ─────────────────────────────────────────────────
+
+function getMasteryStore() {
+  try { return JSON.parse(localStorage.getItem(MASTERY_STORE)) || {}; } catch { return {}; }
+}
+function saveMasteryStore(s) { localStorage.setItem(MASTERY_STORE, JSON.stringify(s)); }
+
+function getLessonMastery(lessonId) { return getMasteryStore()[lessonId] || {}; }
+
+function markQuestionMastered(lessonId, qi) {
+  const s = getMasteryStore();
+  if (!s[lessonId]) s[lessonId] = {};
+  s[lessonId][qi] = true;
+  saveMasteryStore(s);
+}
+
+// ── Replacement Question Cache ────────────────────────────────────────────────
+
+function getReplacementStore() {
+  try { return JSON.parse(localStorage.getItem(REPLACEMENT_STORE)) || {}; } catch { return {}; }
+}
+function saveReplacementStore(s) { localStorage.setItem(REPLACEMENT_STORE, JSON.stringify(s)); }
+
+function getCachedReplacement(lessonId, qi) {
+  return getReplacementStore()[lessonId]?.[qi] || null;
+}
+function cacheReplacement(lessonId, qi, q) {
+  const s = getReplacementStore();
+  if (!s[lessonId]) s[lessonId] = {};
+  s[lessonId][qi] = q;
+  saveReplacementStore(s);
+}
+
+// Build the quiz question list for a lesson, swapping in replacements for mastered questions
+function buildAdaptiveQuestions(lessonId, baseQuestions) {
+  const mastery = getLessonMastery(lessonId);
+  return baseQuestions.map((q, i) => {
+    if (!mastery[i]) return q;
+    const replacement = getCachedReplacement(lessonId, i);
+    // _isReplacement flag used by renderQuizView to show the "upgraded" badge
+    return replacement ? { ...replacement, _isReplacement: true } : q;
+  });
+}
+
+// Fire-and-forget: fetch a harder replacement from Claude API after a correct answer
+async function fetchAndCacheReplacement(lessonId, qi, originalQ, lessonTitle) {
+  const apiKey = getApiKey();
+  if (!apiKey) return;
+
+  const prompt = `You are a CI/CD expert teaching a Senior Technical Product Manager at a financial institution.
+
+The student has mastered this quiz question from the lesson "${lessonTitle}":
+Question: "${originalQ.q}"
+Correct answer: "${originalQ.options[originalQ.answer]}"
+Explanation: "${originalQ.explanation}"
+
+Generate ONE harder follow-up question on the SAME specific topic. It should require deeper understanding, test an edge case, or apply the concept to a real-world banking scenario beyond the basic definition.
+
+Respond with ONLY valid JSON — no markdown fences, no extra text:
+{"q":"question text","options":["A","B","C","D"],"answer":0,"explanation":"why this is correct"}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const raw  = data.content[0].text.trim();
+    const q    = JSON.parse(raw);
+    // Validate structure before caching
+    if (q.q && Array.isArray(q.options) && q.options.length === 4 && typeof q.answer === 'number') {
+      cacheReplacement(lessonId, qi, q);
+    }
+  } catch { /* silently fail — next retake will try again */ }
+}
+
+// Called after quiz submit: marks mastered questions and kicks off background replacements
+function processQuizMastery(lessonId, questions, answers) {
+  const allLessons = CURRICULUM.flatMap(m => m.lessons.map(l => ({ ...l, moduleTitle: m.title })));
+  const lesson = allLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+
+  questions.forEach((q, i) => {
+    if (answers[i] === q.answer) {
+      markQuestionMastered(lessonId, i);
+      // Always refresh replacement when question is answered correctly
+      fetchAndCacheReplacement(lessonId, i, q, lesson.title);
+    }
+  });
+}
+
+// ── Advanced Module Generation ────────────────────────────────────────────────
+
+function getAdvancedModulesStore() {
+  try { return JSON.parse(localStorage.getItem(ADVANCED_MOD_STORE)) || {}; } catch { return {}; }
+}
+function saveAdvancedModulesStore(s) { localStorage.setItem(ADVANCED_MOD_STORE, JSON.stringify(s)); }
+function getStoredAdvancedModule(moduleId)     { return getAdvancedModulesStore()[moduleId] || null; }
+function storeAdvancedModule(moduleId, mod)    {
+  const s = getAdvancedModulesStore(); s[moduleId] = mod; saveAdvancedModulesStore(s);
+}
+function getAllStoredAdvancedModules() { return Object.values(getAdvancedModulesStore()); }
+
+// Called once at boot: inject any stored advanced modules into the CURRICULUM array
+function initAdvancedModules() {
+  getAllStoredAdvancedModules().forEach(mod => {
+    if (!CURRICULUM.find(c => c.id === mod.id)) {
+      CURRICULUM.push(mod);
+    }
+  });
+}
+
+async function fetchAdvancedModule(moduleId) {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('NO_KEY');
+
+  const mod    = CURRICULUM.find(m => m.id === moduleId);
+  const avg    = getModuleAvgScore(moduleId);
+
+  const prompt = `You are a CI/CD curriculum designer creating an ADVANCED follow-up module for a Senior Technical Product Manager at a large financial institution.
+
+The student has completed the "${mod.title}" module (average quiz score: ${avg}%) covering: ${mod.lessons.map(l => l.title).join(', ')}.
+
+Create a 2-lesson advanced module that goes significantly deeper. Topics must cover:
+- Complex architectural trade-offs and design decisions
+- Real-world banking/financial industry scenarios and regulatory context
+- Strategic considerations a Senior TPM needs for executive conversations
+- Edge cases and failure modes that occur in enterprise environments
+
+Respond with ONLY valid JSON — no markdown fences, no commentary:
+{
+  "title": "Advanced: [specific descriptive title for this subject area]",
+  "desc": "One sentence describing this advanced module",
+  "lessons": [
+    {
+      "title": "Lesson title",
+      "duration": "[N] min read",
+      "content": "[500-700 words of HTML using <h3>, <p>, <ul>, <li>, <strong>, <em>, <div class=\\"tip\\">, <div class=\\"warning\\"> — no inline style attributes]",
+      "takeaways": ["point 1", "point 2", "point 3", "point 4"],
+      "quiz": [
+        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 1, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 2, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"}
+      ]
+    },
+    {
+      "title": "Lesson 2 title",
+      "duration": "[N] min read",
+      "content": "[500-700 words of HTML same format]",
+      "takeaways": ["point 1", "point 2", "point 3", "point 4"],
+      "quiz": [
+        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 1, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 2, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"}
+      ]
+    }
+  ]
+}`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
+
+  const data       = await res.json();
+  const raw        = data.content[0].text.trim();
+  const moduleData = JSON.parse(raw);
+  const advId      = `adv-${moduleId}`;
+
+  return {
+    id:           advId,
+    title:        moduleData.title,
+    icon:         '🎓',
+    desc:         moduleData.desc,
+    prerequisite: moduleId,
+    isAdvanced:   true,
+    lessons:      moduleData.lessons.map((l, i) => ({
+      id:        `${advId}-l${i + 1}`,
+      title:     l.title,
+      duration:  l.duration,
+      content:   l.content,
+      takeaways: l.takeaways,
+      resources: [],
+      quiz:      l.quiz
+    }))
+  };
+}
+
+async function startGenerateAdvancedModule(moduleId) {
+  generatingAdvancedModule = moduleId;
+  render();
+  try {
+    const mod = await fetchAdvancedModule(moduleId);
+    storeAdvancedModule(moduleId, mod);
+    if (!CURRICULUM.find(c => c.id === mod.id)) CURRICULUM.push(mod);
+    generatingAdvancedModule = null;
+    navigate('module', mod.id);
+  } catch (e) {
+    generatingAdvancedModule = null;
+    alert(e.message === 'NO_KEY'
+      ? 'No API key configured. Please save your Anthropic API key first.'
+      : 'Could not generate advanced module: ' + e.message);
+    render();
+  }
+}
+
+// ── Updated renderModuleCompletePrompt ────────────────────────────────────────
 
 function renderAdaptiveLessonView() {
   if (!adaptiveLesson) { navigate('dashboard'); return ''; }

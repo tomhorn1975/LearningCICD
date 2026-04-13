@@ -131,6 +131,13 @@ nav { display: flex; gap: 8px; }
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
+.module-card-advanced {
+  border-color: #d8b4fe;
+  background: linear-gradient(135deg, var(--surface) 0%, #faf5ff 100%);
+}
+.module-card-advanced:hover {
+  border-color: #a855f7;
+}
 .module-card-header {
   display: flex;
   align-items: flex-start;
