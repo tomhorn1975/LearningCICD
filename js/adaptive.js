@@ -60,11 +60,13 @@ Respond with ONLY a valid JSON object — no markdown fences, no commentary. Use
   "content": "[400-600 words of HTML using <h3>, <p>, <ul>, <li>, <strong>, <em>, and <div class=\\"tip\\"> for TPM-specific callouts]",
   "takeaways": ["point 1", "point 2", "point 3", "point 4"],
   "quiz": [
+    {"q": "question text", "options": ["A", "B", "C", "D"], "answer": 2, "explanation": "why this answer is correct"},
     {"q": "question text", "options": ["A", "B", "C", "D"], "answer": 0, "explanation": "why this answer is correct"},
-    {"q": "question text", "options": ["A", "B", "C", "D"], "answer": 1, "explanation": "why this answer is correct"},
-    {"q": "question text", "options": ["A", "B", "C", "D"], "answer": 2, "explanation": "why this answer is correct"}
+    {"q": "question text", "options": ["A", "B", "C", "D"], "answer": 3, "explanation": "why this answer is correct"}
   ]
-}`;
+}
+
+IMPORTANT: "answer" is the zero-based index of the correct option (0=A, 1=B, 2=C, 3=D). Distribute correct answers across all four positions — do not default to the same position for every question. Write each question so the correct answer could be ANY of the four options, then set "answer" accordingly.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -330,7 +332,9 @@ Explanation: "${originalQ.explanation}"
 Generate ONE harder follow-up question on the SAME specific topic. It should require deeper understanding, test an edge case, or apply the concept to a real-world banking scenario beyond the basic definition.
 
 Respond with ONLY valid JSON — no markdown fences, no extra text:
-{"q":"question text","options":["A","B","C","D"],"answer":0,"explanation":"why this is correct"}`;
+{"q":"question text","options":["A","B","C","D"],"answer":2,"explanation":"why this is correct"}
+
+IMPORTANT: "answer" is the zero-based index of the correct option (0=A, 1=B, 2=C, 3=D). Write the question so the correct answer could be at any position — do not always place it at index 2 or any fixed position. Set "answer" to match whichever option is actually correct.`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -422,10 +426,10 @@ Respond with ONLY valid JSON — no markdown fences, no commentary:
       "content": "[500-700 words of HTML using <h3>, <p>, <ul>, <li>, <strong>, <em>, <div class=\\"tip\\">, <div class=\\"warning\\"> — no inline style attributes]",
       "takeaways": ["point 1", "point 2", "point 3", "point 4"],
       "quiz": [
-        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
         {"q": "question", "options": ["A","B","C","D"], "answer": 1, "explanation": "why correct"},
-        {"q": "question", "options": ["A","B","C","D"], "answer": 2, "explanation": "why correct"},
-        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"}
+        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 2, "explanation": "why correct"}
       ]
     },
     {
@@ -434,14 +438,16 @@ Respond with ONLY valid JSON — no markdown fences, no commentary:
       "content": "[500-700 words of HTML same format]",
       "takeaways": ["point 1", "point 2", "point 3", "point 4"],
       "quiz": [
-        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
-        {"q": "question", "options": ["A","B","C","D"], "answer": 1, "explanation": "why correct"},
         {"q": "question", "options": ["A","B","C","D"], "answer": 2, "explanation": "why correct"},
-        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"}
+        {"q": "question", "options": ["A","B","C","D"], "answer": 0, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 3, "explanation": "why correct"},
+        {"q": "question", "options": ["A","B","C","D"], "answer": 1, "explanation": "why correct"}
       ]
     }
   ]
-}`;
+}
+
+IMPORTANT: "answer" is the zero-based index of the correct option (0=A, 1=B, 2=C, 3=D). For EVERY question, write all four options as plausible answers, then place the correct one at a varied position — spread answers across A, B, C, and D. Never default to the same letter for multiple questions in a row.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
