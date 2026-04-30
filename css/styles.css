@@ -305,7 +305,8 @@ nav { display: flex; gap: 8px; }
 .audio-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 28px;
   padding: 10px 14px;
   background: #f8fafc;
@@ -331,17 +332,30 @@ nav { display: flex; gap: 8px; }
   cursor: pointer;
   transition: background .15s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .btn-audio:hover { background: var(--primary-light); }
 .btn-audio.tts-active { background: var(--accent); }
 .tts-icon { font-size: 15px; }
-.tts-label {
+.tts-select {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   font-size: 13px;
-  color: var(--muted);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+  max-width: 320px;
 }
-.audio-bar.tts-bar-active .tts-label {
-  color: var(--accent);
-  font-weight: 500;
+.tts-select:focus { border-color: var(--accent); }
+.tts-rate-select { max-width: 90px; flex-shrink: 0; }
+.audio-bar.tts-bar-active .tts-select {
+  border-color: #bfdbfe;
+  background: white;
 }
 .lesson-body h3 {
   font-size: 16px;

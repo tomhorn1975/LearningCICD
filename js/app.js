@@ -283,7 +283,12 @@ function renderLessonView() {
             <button id="tts-btn" class="btn-audio" onclick="ttsToggle()">
               <span class="tts-icon">🔊</span> Listen
             </button>
-            <span class="tts-label">Read lesson aloud</span>
+            <select id="tts-voice-select" class="tts-select" onchange="ttsSetVoice(this.value)" title="Voice">
+              ${_ttsVoiceOptionsHTML()}
+            </select>
+            <select id="tts-rate-select" class="tts-select tts-rate-select" onchange="ttsSetRate(parseFloat(this.value))" title="Speed">
+              ${_ttsRateOptionsHTML()}
+            </select>
           </div>
           <div class="lesson-body">${lesson.content}</div>
         </div>
