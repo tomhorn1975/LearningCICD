@@ -295,10 +295,53 @@ nav { display: flex; gap: 8px; }
 .lesson-duration {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+/* ── Audio bar ── */
+.audio-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .2s, background .2s;
+}
+.audio-bar.tts-bar-active {
+  border-color: var(--accent);
+  background: #eff6ff;
+}
+.btn-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 18px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.btn-audio:hover { background: var(--primary-light); }
+.btn-audio.tts-active { background: var(--accent); }
+.tts-icon { font-size: 15px; }
+.tts-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+.audio-bar.tts-bar-active .tts-label {
+  color: var(--accent);
+  font-weight: 500;
 }
 .lesson-body h3 {
   font-size: 16px;

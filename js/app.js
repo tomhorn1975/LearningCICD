@@ -252,6 +252,7 @@ function renderLessonView() {
   if (ls.status === 'not-started') {
     setLessonState(lesson.id, { status: 'in-progress' });
   }
+  ttsSetLesson(lesson);
 
   const takeawaysHTML = lesson.takeaways.map(t => `
     <div class="takeaway-item">
@@ -278,6 +279,12 @@ function renderLessonView() {
         <div class="lesson-content">
           <div class="lesson-content-title">${lesson.title}</div>
           <div class="lesson-duration">⏱ ${lesson.duration}</div>
+          <div class="audio-bar" id="tts-bar">
+            <button id="tts-btn" class="btn-audio" onclick="ttsToggle()">
+              <span class="tts-icon">🔊</span> Listen
+            </button>
+            <span class="tts-label">Read lesson aloud</span>
+          </div>
           <div class="lesson-body">${lesson.content}</div>
         </div>
       </div>
@@ -617,6 +624,8 @@ function renderResultsResourcesView() {
 // Patch navigate to handle resources and adaptive views
 const _origNavigate = navigate;
 window.navigate = function(view, moduleId, lessonId) {
+  ttsStop();
+
   // Reset adaptive mode when leaving adaptive views
   if (!['adaptive-lesson', 'adaptive-loading', 'adaptive-error', 'quiz', 'results'].includes(view)) {
     currentIsAdaptive = false;
