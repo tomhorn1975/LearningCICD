@@ -5526,5 +5526,373 @@ PHASE 4: EMBEDDING (Months 8+)
         ]
       }
     ]
+  },
+  {
+    id: "ai-ml-for-tpm",
+    title: "AI/ML for TPMs",
+    icon: "🤖",
+    desc: "LLMs, RAG, embeddings, doc intelligence, and tactical story writing for Azure and AWS",
+    lessons: [
+      {
+        id: "ai-ml-building-blocks",
+        title: "AI/ML Building Blocks: The Six Elements",
+        duration: "10 min read",
+        content: `
+<h3>Why These Six Elements?</h3>
+<p>Every modern AI product — whether a chatbot, document search tool, or underwriting assistant — is assembled from the same six building blocks. As a TPM, you need to name them precisely, explain what each one does, and know the exact service names on Azure and AWS. In interviews and story grooming, vague language loses credibility fast.</p>
+
+<h3>1. Large Language Model (LLM)</h3>
+<p>An LLM is a neural network trained on massive text corpora that can generate, summarize, classify, and reason about language. It takes a prompt (text in) and returns a completion (text out).</p>
+<ul>
+  <li><strong>Azure:</strong> Azure OpenAI Service — hosts GPT-4o, GPT-4, GPT-3.5-Turbo, o1, o3-mini</li>
+  <li><strong>AWS:</strong> Amazon Bedrock — hosts Claude (Anthropic), Titan (Amazon), Llama (Meta), Mistral, Cohere Command</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> The LLM is the "reasoning engine." It doesn't know your company's data — it needs context delivered to it via prompts, which is where RAG comes in.</div>
+
+<h3>2. Text Embedding Model</h3>
+<p>An embedding model converts text into a dense numeric vector (a list of hundreds or thousands of floating-point numbers). Semantically similar texts produce similar vectors. This is what enables "semantic search" — finding documents by meaning, not just keyword matches.</p>
+<ul>
+  <li><strong>Azure:</strong> Azure OpenAI Embeddings — <code>text-embedding-ada-002</code>, <code>text-embedding-3-small</code>, <code>text-embedding-3-large</code></li>
+  <li><strong>AWS:</strong> Amazon Bedrock Titan Embeddings, Amazon SageMaker (host open-source embedding models like sentence-transformers)</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> Embeddings are what make your vector database searchable. Every document chunk you ingest gets embedded and stored. Every user query gets embedded and compared against stored vectors at query time.</div>
+
+<h3>3. Retrieval-Augmented Generation (RAG)</h3>
+<p>RAG is an architecture pattern — not a single service — that combines semantic search with LLM generation. The flow: (1) embed the user's question, (2) search a vector store for the most relevant document chunks, (3) inject those chunks into the LLM's prompt as context, (4) the LLM generates a grounded answer.</p>
+<ul>
+  <li><strong>Azure:</strong> Azure AI Search (vector store + hybrid search) + Azure OpenAI Service (generation). Also: Azure AI Foundry provides end-to-end RAG orchestration.</li>
+  <li><strong>AWS:</strong> Amazon OpenSearch Service (vector search) + Amazon Bedrock (generation). Also: Amazon Kendra (managed enterprise search) + Bedrock. AWS also offers Amazon Bedrock Knowledge Bases as a managed RAG service.</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> RAG solves the "LLM doesn't know our data" problem without fine-tuning the model. It's the most common AI architecture pattern you'll build stories around.</div>
+
+<h3>4. Document Intelligence</h3>
+<p>Document intelligence extracts structured data from unstructured documents — PDFs, scanned forms, images, tables, handwriting. It uses OCR plus layout analysis and pre-trained field extraction models. This is typically the first step in a RAG pipeline: ingest → extract → chunk → embed.</p>
+<ul>
+  <li><strong>Azure:</strong> Azure AI Document Intelligence (formerly Azure Form Recognizer) — pre-built models for invoices, receipts, IDs; custom models for proprietary forms</li>
+  <li><strong>AWS:</strong> Amazon Textract — extracts text, tables, key-value pairs, and form fields from documents</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> In banking, doc intelligence is critical for processing loan applications, KYC documents, and compliance filings. Know the difference between pre-built models (fast, no training data needed) and custom models (requires labeled examples).</div>
+
+<h3>5. Model Building / Training</h3>
+<p>This is where custom ML models are built from scratch or fine-tuned from a base model. It involves defining architecture, preparing training data, running training jobs (GPU compute), evaluating results, and registering the trained model artifact.</p>
+<ul>
+  <li><strong>Azure:</strong> Azure Machine Learning (Azure ML) — managed training jobs, compute clusters, experiment tracking, model registry</li>
+  <li><strong>AWS:</strong> Amazon SageMaker — training jobs, built-in algorithms, hyperparameter tuning, experiment tracking, model registry</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> Most product teams use pre-built LLMs (Azure OpenAI / Bedrock) and skip custom training. Custom training stories appear when you're building proprietary models — e.g., a fraud detection classifier, a credit risk scorer, or fine-tuning an LLM on internal domain language.</div>
+
+<h3>6. Model Inferencing</h3>
+<p>Inferencing (also called "serving" or "scoring") is deploying a trained model so applications can call it in real time or batch. It includes an endpoint (REST API), auto-scaling, latency SLAs, and monitoring.</p>
+<ul>
+  <li><strong>Azure:</strong> Azure Machine Learning Online Endpoints (real-time) and Batch Endpoints (async large-scale). Azure OpenAI Service itself is also an inferencing layer for OpenAI models.</li>
+  <li><strong>AWS:</strong> Amazon SageMaker Real-Time Inference Endpoints, SageMaker Serverless Inference, SageMaker Batch Transform. Amazon Bedrock handles inferencing for its hosted foundation models.</li>
+</ul>
+<div class="tip"><strong>TPM framing:</strong> Inferencing stories often involve latency budgets ("p95 &lt; 2s"), throughput requirements ("1,000 requests/minute"), and cost optimization (provisioned vs. serverless endpoints).</div>
+
+<h3>The Full Picture: How They Connect</h3>
+<pre style="background:#1e2736;color:#e2e8f0;padding:16px;border-radius:8px;font-size:13px;overflow-x:auto;">
+Document (PDF/form)
+       |
+  [Doc Intelligence]       ← Azure AI Document Intelligence / AWS Textract
+       |
+   Text Chunks
+       |
+  [Embedding Model]        ← Azure OpenAI Embeddings / AWS Bedrock Titan Embeddings
+       |
+   Vectors stored in
+  [Vector Store / RAG]     ← Azure AI Search / AWS OpenSearch or Bedrock Knowledge Bases
+       |
+  User Query → Embed → Search → Top-K Chunks
+                                      |
+                                   [LLM]           ← Azure OpenAI / AWS Bedrock
+                                      |
+                               Grounded Answer
+</pre>`,
+        takeaways: [
+          "LLM = reasoning engine: Azure OpenAI Service (GPT-4o) / AWS Bedrock (Claude, Titan, Llama)",
+          "Embedding model = text → vector: Azure OpenAI Embeddings (text-embedding-3-*) / AWS Bedrock Titan Embeddings",
+          "RAG = semantic search + LLM: Azure AI Search + Azure OpenAI / AWS OpenSearch or Bedrock Knowledge Bases",
+          "Doc Intelligence = structured extraction from docs: Azure AI Document Intelligence / AWS Textract",
+          "Model Training: Azure Machine Learning / AWS SageMaker",
+          "Inferencing = serving predictions: Azure ML Online Endpoints / AWS SageMaker Endpoints"
+        ],
+        resources: [
+          { type: "docs", title: "Azure OpenAI Service Overview", desc: "Microsoft docs — models, quotas, deployment", url: "https://learn.microsoft.com/en-us/azure/ai-services/openai/overview" },
+          { type: "docs", title: "Amazon Bedrock Overview", desc: "AWS docs — foundation models, knowledge bases", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html" },
+          { type: "docs", title: "Azure AI Document Intelligence", desc: "Microsoft docs — pre-built and custom models", url: "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview" },
+          { type: "docs", title: "Amazon Textract", desc: "AWS docs — document text extraction", url: "https://docs.aws.amazon.com/textract/latest/dg/what-is.html" }
+        ],
+        quiz: [
+          {
+            q: "Your team is on Azure and needs to host GPT-4o for a customer chatbot. Which service do you use?",
+            options: ["Azure Machine Learning", "Azure AI Document Intelligence", "Azure OpenAI Service", "Azure AI Search"],
+            answer: 2,
+            explanation: "Azure OpenAI Service is Microsoft's managed service for hosting OpenAI models including GPT-4o. Azure Machine Learning is for training/deploying custom models; Azure AI Search is the vector store; Document Intelligence is for extracting data from documents."
+          },
+          {
+            q: "On AWS, which service hosts foundation models like Claude (Anthropic) and Llama (Meta) behind a single API?",
+            options: ["Amazon SageMaker", "Amazon Bedrock", "Amazon Textract", "Amazon Kendra"],
+            answer: 1,
+            explanation: "Amazon Bedrock is AWS's managed foundation model service. It hosts Claude, Titan, Llama, Mistral, and Cohere models. SageMaker is for training and deploying custom models. Textract is doc extraction. Kendra is enterprise search."
+          },
+          {
+            q: "A user types a question and the system must find the most relevant internal policy documents to include in the LLM's prompt. Which component does this retrieval step?",
+            options: ["The LLM itself via in-context learning", "The embedding model only", "The vector store / semantic search (e.g., Azure AI Search or AWS OpenSearch)", "Azure AI Document Intelligence"],
+            answer: 2,
+            explanation: "The vector store performs the retrieval step in a RAG pipeline. The query is embedded, and the vector store finds the closest document chunks by cosine similarity. The LLM then generates the answer using those retrieved chunks as context — it does not search documents itself."
+          },
+          {
+            q: "You're building a pipeline to ingest 50,000 loan application PDFs into a RAG system. The PDFs contain tables and handwritten fields. Which service handles the extraction step?",
+            options: ["Azure OpenAI Service / AWS Bedrock (LLM reads the PDFs directly)", "Azure AI Document Intelligence / AWS Textract", "Azure Machine Learning / AWS SageMaker (train a custom extractor)", "Azure AI Search / AWS OpenSearch"],
+            answer: 1,
+            explanation: "Azure AI Document Intelligence (Azure) and Amazon Textract (AWS) are purpose-built for extracting structured content from PDFs and scanned documents, including tables and form fields. LLMs can read text but can't process raw PDFs at scale, and training a custom extractor is unnecessary when these managed services exist."
+          },
+          {
+            q: "Which Azure service would you use to convert a block of text into a numeric vector for storage in a vector database?",
+            options: ["Azure Machine Learning", "Azure OpenAI Service — using an embeddings model (e.g., text-embedding-3-large)", "Azure AI Document Intelligence", "Azure Cognitive Search (keyword mode)"],
+            answer: 1,
+            explanation: "Text embedding models are accessed through Azure OpenAI Service, using models like text-embedding-3-small or text-embedding-3-large. These models convert text into dense float vectors. Azure Machine Learning is for training custom models; Document Intelligence extracts from raw documents; Cognitive Search stores and retrieves vectors but doesn't generate them."
+          },
+          {
+            q: "Your data science team has trained a fraud detection classifier and needs to expose it as a REST endpoint that can handle 500 requests per second in real time. Which service on AWS handles this?",
+            options: ["Amazon Bedrock (Real-Time Inference)", "Amazon Textract", "Amazon SageMaker Real-Time Inference Endpoint", "Amazon OpenSearch"],
+            answer: 2,
+            explanation: "Amazon SageMaker Real-Time Inference Endpoints deploy trained models as scalable REST APIs. Bedrock hosts foundation models (Claude, Titan, etc.) — not custom-trained models. Textract is for document extraction. OpenSearch is a search/vector store."
+          },
+          {
+            q: "In the RAG architecture, what is the correct order of operations when a user submits a question?",
+            options: [
+              "LLM generates answer → embed question → search vector store → return answer",
+              "Embed question → search vector store → inject top chunks into LLM prompt → LLM generates answer",
+              "Search vector store → embed question → LLM generates answer → inject chunks",
+              "Embed question → LLM generates answer → search vector store for grounding"
+            ],
+            answer: 1,
+            explanation: "RAG flow: (1) Embed the user's question using the embedding model. (2) Search the vector store for the most semantically similar document chunks. (3) Inject those chunks into the LLM's prompt as context. (4) The LLM generates a grounded answer based on that context. The LLM does not search — it only generates from what's in its prompt."
+          },
+          {
+            q: "A TPM says 'we're using Bedrock Knowledge Bases for our RAG pipeline.' What does this tell you about their AWS architecture?",
+            options: [
+              "They are training a custom LLM from scratch on their own data",
+              "They are using a managed AWS service that handles document ingestion, chunking, embedding, vector storage, and retrieval — abstracting the RAG pipeline components",
+              "They are only using Amazon Textract to extract documents",
+              "They are using Amazon Kendra for keyword-based enterprise search"
+            ],
+            answer: 1,
+            explanation: "Amazon Bedrock Knowledge Bases is a fully managed RAG service. It handles the entire pipeline: ingest documents → chunk → embed (using Titan Embeddings) → store in a vector store (OpenSearch or Pinecone) → retrieve at query time. It abstracts away the individual components so teams don't wire them together manually. This is the 'managed RAG' option on AWS."
+          }
+        ]
+      },
+      {
+        id: "tactical-story-writing",
+        title: "Writing Tactical Stories for AI/ML Features",
+        duration: "12 min read",
+        content: `
+<h3>What Makes a Story "Tactical"?</h3>
+<p>A tactical story is actionable, testable, and scoped. It gives the engineering team everything they need to build and verify the feature — no ambiguity, no assumptions left unstated. For AI/ML features specifically, a vague story ("add AI to the app") causes months of misalignment. A tactical story names the model, the service, the data flow, the latency budget, and the acceptance criteria.</p>
+
+<h3>The Anatomy of a Tactical AI/ML Story</h3>
+<pre style="background:#1e2736;color:#e2e8f0;padding:16px;border-radius:8px;font-size:13px;overflow-x:auto;">
+Title: [Action verb] + [component] + [outcome]
+
+User Story:
+As a [persona],
+I want to [action],
+So that [measurable business outcome].
+
+Acceptance Criteria:
+- Given [precondition], when [trigger], then [observable outcome]
+- Performance: [latency / throughput / token limit]
+- Data: [source, volume, format]
+- Integration: [upstream and downstream systems]
+- Error handling: [what happens when the model fails or returns low-confidence output]
+
+Technical Notes (non-prescriptive guidance):
+- Suggested service: [Azure OpenAI / Bedrock / etc.]
+- Model: [GPT-4o / Claude 3.5 Sonnet / etc.]
+- Chunking: [strategy, size, overlap]
+- Embedding model: [text-embedding-3-large / Titan Embeddings / etc.]
+</pre>
+
+<h3>Story 1: Ingest Policy Documents into a RAG Knowledge Base</h3>
+<div style="background:#0f2027;border:1px solid #2d4a6e;border-radius:8px;padding:16px;margin:16px 0;">
+<p><strong>Title:</strong> Ingest compliance policy PDFs into Azure AI Search vector store for RAG retrieval</p>
+<p><strong>User Story:</strong><br>
+As a compliance officer,<br>
+I want uploaded policy PDFs to be automatically processed and available for semantic search,<br>
+So that the AI assistant can retrieve and cite accurate, current policy text when answering employee questions.</p>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>Given a PDF is uploaded to the designated Azure Blob Storage container, when the ingestion pipeline runs, then the document is extracted via Azure AI Document Intelligence, chunked (512 tokens, 50-token overlap), embedded using text-embedding-3-large, and indexed in Azure AI Search within 5 minutes</li>
+  <li>Chunks preserve source document name, page number, and section heading as metadata fields</li>
+  <li>Documents with extraction errors (e.g., corrupted PDFs) are moved to a /failed folder and a failure alert is sent to the ops team via email</li>
+  <li>Pipeline supports up to 500 documents per batch without manual intervention</li>
+</ul>
+<p><strong>Technical Notes:</strong> Azure AI Document Intelligence (pre-built layout model) → chunk with LangChain RecursiveCharacterTextSplitter → Azure OpenAI text-embedding-3-large → Azure AI Search index with HNSW vector configuration</p>
+</div>
+
+<h3>Story 2: Real-Time RAG Chat Endpoint</h3>
+<div style="background:#0f2027;border:1px solid #2d4a6e;border-radius:8px;padding:16px;margin:16px 0;">
+<p><strong>Title:</strong> Implement RAG-grounded chat endpoint using Azure OpenAI GPT-4o and Azure AI Search</p>
+<p><strong>User Story:</strong><br>
+As a support agent,<br>
+I want to ask natural-language questions about internal policies and receive cited answers,<br>
+So that I can resolve customer inquiries in under 2 minutes without manually searching SharePoint.</p>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>Given a text query submitted to the /chat endpoint, when processed, then the system embeds the query, retrieves the top 5 chunks from Azure AI Search (hybrid: vector + keyword), injects them into a GPT-4o prompt, and returns a response with inline citations (document name + page)</li>
+  <li>End-to-end response time: p95 &lt; 3 seconds</li>
+  <li>Each response includes a "sources" array listing retrieved chunk metadata</li>
+  <li>If no relevant chunks are retrieved (similarity score &lt; 0.75), the response states "I don't have enough information to answer this from current policy documents" rather than hallucinating</li>
+  <li>Token budget: max 3,000 tokens in context window (system prompt + retrieved chunks + user query)</li>
+</ul>
+<p><strong>Technical Notes:</strong> Azure OpenAI GPT-4o deployment in East US 2 region; Azure AI Search hybrid retrieval; temperature: 0.1 (low for factual grounding); system prompt instructs model to only answer from provided context</p>
+</div>
+
+<h3>Story 3: Document Field Extraction (AWS)</h3>
+<div style="background:#0f2027;border:1px solid #2d4a6e;border-radius:8px;padding:16px;margin:16px 0;">
+<p><strong>Title:</strong> Extract structured fields from loan application PDFs using Amazon Textract</p>
+<p><strong>User Story:</strong><br>
+As a loan operations analyst,<br>
+I want submitted loan application PDFs to be automatically parsed into structured data fields,<br>
+So that underwriters receive pre-populated application records in the LOS within 60 seconds of submission.</p>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>Given a loan application PDF is uploaded to the S3 input bucket, when the Lambda trigger fires, then Amazon Textract AnalyzeDocument is called and extracts: applicant name, SSN (last 4), income, employer, loan amount requested, and property address</li>
+  <li>Extracted fields are validated: income must be numeric; loan amount must be &gt; $0; if validation fails, the record is routed to a manual review queue in the LOS</li>
+  <li>Processing SLA: extracted data available in LOS within 60 seconds of upload for documents up to 20 pages</li>
+  <li>Confidence scores from Textract are stored alongside extracted values; fields with confidence &lt; 80% are flagged for human review</li>
+  <li>PII (SSN) is masked in logs and never written to CloudWatch in plaintext</li>
+</ul>
+<p><strong>Technical Notes:</strong> Amazon Textract AnalyzeDocument (FORMS feature type); Lambda → Textract → DynamoDB staging table → LOS API integration; KMS encryption for S3 bucket</p>
+</div>
+
+<h3>Story 4: Model Inferencing Endpoint (AWS SageMaker)</h3>
+<div style="background:#0f2027;border:1px solid #2d4a6e;border-radius:8px;padding:16px;margin:16px 0;">
+<p><strong>Title:</strong> Deploy fraud detection model to SageMaker real-time endpoint with auto-scaling</p>
+<p><strong>User Story:</strong><br>
+As a fraud operations engineer,<br>
+I want the trained fraud detection model served as a low-latency REST endpoint,<br>
+So that transaction processing can call it synchronously and flag high-risk transactions before authorization.</p>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>Given the approved model artifact is registered in the SageMaker Model Registry, when the deployment pipeline runs, then a SageMaker Real-Time Inference Endpoint is created using the approved model version</li>
+  <li>Endpoint latency: p99 &lt; 150ms for single-transaction scoring requests</li>
+  <li>Auto-scaling: minimum 2 instances, scale out when CPU &gt; 70% sustained for 3 minutes, maximum 10 instances</li>
+  <li>Endpoint returns: fraud_score (float 0–1), risk_tier (LOW/MEDIUM/HIGH), top 3 contributing features</li>
+  <li>Blue/green deployment: new model version is validated against shadow traffic for 30 minutes before full cutover; rollback is automated if error rate exceeds 0.5%</li>
+  <li>Model monitoring: SageMaker Model Monitor runs data quality checks every 6 hours; drift alerts go to the ML Ops team Slack channel</li>
+</ul>
+<p><strong>Technical Notes:</strong> SageMaker Real-Time Endpoint with ml.m5.xlarge instances; Application Auto Scaling; SageMaker Model Registry approval gate integrated with CI/CD pipeline; SageMaker Model Monitor for data drift detection</p>
+</div>
+
+<h3>Story 5: Bedrock Knowledge Bases — Managed RAG (AWS)</h3>
+<div style="background:#0f2027;border:1px solid #2d4a6e;border-radius:8px;padding:16px;margin:16px 0;">
+<p><strong>Title:</strong> Configure Amazon Bedrock Knowledge Base for HR policy Q&amp;A</p>
+<p><strong>User Story:</strong><br>
+As an HR team member,<br>
+I want employees to ask natural-language questions about HR policies via a chatbot,<br>
+So that HR reduces repetitive policy lookup requests by 40% within 90 days of launch.</p>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>Given HR policy documents (Word, PDF) are stored in the designated S3 bucket, when synced, then Bedrock Knowledge Bases automatically chunks, embeds (Titan Embeddings v2), and stores vectors in the managed OpenSearch Serverless collection</li>
+  <li>Chatbot queries route through the Bedrock RetrieveAndGenerate API using Claude 3.5 Sonnet; responses include source citations</li>
+  <li>Sync latency: new or updated documents appear in the knowledge base within 15 minutes of S3 upload</li>
+  <li>Out-of-scope queries (e.g., personal medical questions) return a graceful redirect to HR contact info, not a hallucinated answer</li>
+  <li>Access control: only authenticated employees (via IAM Identity Center SSO) can query the endpoint</li>
+</ul>
+<p><strong>Technical Notes:</strong> Amazon Bedrock Knowledge Bases with S3 data source; Titan Embeddings v2; OpenSearch Serverless vector store; Claude 3.5 Sonnet for generation; Bedrock RetrieveAndGenerate API</p>
+</div>
+
+<h3>Common Pitfalls in AI/ML Story Writing</h3>
+<ul>
+  <li><strong>No acceptance criteria for failure cases</strong> — what happens when the model returns low confidence, or the vector store returns 0 results? Always define the fallback.</li>
+  <li><strong>Vague performance requirements</strong> — "fast" is not a story. "p95 &lt; 3 seconds" is.</li>
+  <li><strong>Missing PII / data governance criteria</strong> — in banking, if the story touches customer data, it needs explicit handling for encryption, masking, and audit logging.</li>
+  <li><strong>Prescribing implementation inside the story</strong> — Technical Notes are suggestions. The "then" in acceptance criteria should describe observable behavior, not code structure.</li>
+  <li><strong>No chunking strategy for RAG stories</strong> — chunk size and overlap meaningfully affect retrieval quality. Mention the strategy so the team doesn't guess.</li>
+</ul>`,
+        takeaways: [
+          "A tactical story is: As a [persona], I want [action], so that [measurable outcome] — plus Given/When/Then ACs",
+          "Always include: latency budget, error/fallback behavior, data source, PII handling, and integration points",
+          "Technical Notes are non-prescriptive guidance — the ACs define behavior, not implementation",
+          "For RAG: specify chunking strategy, embedding model, similarity threshold, and citation requirements",
+          "For inferencing: specify p-latency target, auto-scaling bounds, rollback criteria, and monitoring"
+        ],
+        resources: [
+          { type: "article", title: "INVEST criteria for user stories", desc: "Independent, Negotiable, Valuable, Estimable, Small, Testable", url: "https://www.agilealliance.org/glossary/invest/" },
+          { type: "docs", title: "Azure AI Foundry RAG quickstart", desc: "End-to-end RAG pattern on Azure", url: "https://learn.microsoft.com/en-us/azure/ai-studio/tutorials/deploy-chat-web-app" },
+          { type: "docs", title: "Bedrock Knowledge Bases developer guide", desc: "Managed RAG on AWS", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html" }
+        ],
+        quiz: [
+          {
+            q: "A story reads: 'Integrate AI into the loan platform.' What is the most critical problem with this story?",
+            options: [
+              "It doesn't specify which programming language to use",
+              "It lacks a persona, measurable outcome, acceptance criteria, service names, and performance requirements — it is not actionable or testable",
+              "It should mention Azure or AWS specifically",
+              "It's missing a story point estimate"
+            ],
+            answer: 1,
+            explanation: "A tactical story must be actionable and testable. 'Integrate AI' has no persona (who benefits?), no measurable outcome (what changes?), no acceptance criteria (how do we know it works?), and no technical guidance. Every one of those gaps will cause sprint misalignment."
+          },
+          {
+            q: "Your RAG story's acceptance criteria says: 'If no relevant chunks are retrieved, the system returns: I don't have enough information.' Which principle does this AC demonstrate?",
+            options: [
+              "Latency budget definition",
+              "PII masking requirement",
+              "Fallback / graceful degradation behavior — defining what happens when the model can't answer reliably",
+              "Auto-scaling configuration"
+            ],
+            answer: 2,
+            explanation: "Defining fallback behavior is a critical AC for AI systems. LLMs hallucinate when given no grounding context — the story must specify that the system should return a safe, honest message rather than invent an answer. This is one of the most commonly missed ACs in AI/ML stories."
+          },
+          {
+            q: "A story for a document ingestion pipeline says: 'chunks preserve source document name, page number, and section heading as metadata.' Why is this AC important for a RAG system?",
+            options: [
+              "It reduces the token count sent to the LLM",
+              "It enables the system to include citations in responses (which document, which page), making answers verifiable and trustworthy",
+              "It is required by Azure AI Document Intelligence's API",
+              "It improves the embedding model's vector quality"
+            ],
+            answer: 1,
+            explanation: "Metadata preservation is what enables citations. When the LLM generates an answer, it can reference 'Source: Policy 4.2, Section 3, Page 7' only if that metadata was stored alongside the vector. Without it, you get answers with no provenance — a major problem in regulated industries. This is a TPM-level design decision, not an implementation detail."
+          },
+          {
+            q: "Which element of a tactical story is NON-PRESCRIPTIVE (should not appear in Acceptance Criteria)?",
+            options: [
+              "Latency SLA (p95 < 3s)",
+              "Fallback behavior when similarity score is low",
+              "The specific Azure service or SDK the team should use to implement embedding",
+              "The data fields that must be returned in the API response"
+            ],
+            answer: 2,
+            explanation: "Implementation choices (which SDK, which library, which internal service architecture) belong in Technical Notes — non-prescriptive guidance. Acceptance Criteria should describe OBSERVABLE, TESTABLE behavior: what the system returns, how fast, what happens on error. Prescribing implementation in ACs limits the team's engineering autonomy."
+          },
+          {
+            q: "A SageMaker inferencing story includes: 'blue/green deployment: new version validated against shadow traffic for 30 minutes before cutover; rollback automated if error rate > 0.5%.' What problem does this AC solve?",
+            options: [
+              "It reduces the cost of the SageMaker endpoint",
+              "It ensures the model passes data quality checks during training",
+              "It protects production from a bad model version by validating on real traffic before full cutover and enabling automated rollback",
+              "It sets the chunking strategy for the vector store"
+            ],
+            answer: 2,
+            explanation: "Blue/green deployment with shadow traffic and automated rollback is a production safety pattern for model deployments. A new model version might perform worse on production data distributions even if offline metrics look good. This AC ensures the team has a safe, testable promotion process — critical for high-stakes applications like fraud scoring."
+          },
+          {
+            q: "You're writing a story for a document extraction pipeline at a bank. The pipeline processes mortgage applications that contain SSNs. Which AC is MISSING from most first-draft stories?",
+            options: [
+              "The LLM model version to use",
+              "PII masking: SSNs must not appear in logs or monitoring output in plaintext; data must be encrypted at rest and in transit",
+              "The color scheme of the UI",
+              "The number of GPUs required for the training job"
+            ],
+            answer: 1,
+            explanation: "PII handling is frequently omitted from first-draft AI/ML stories in financial services. In banking, SSNs, income, and account numbers are regulated data. An AC must explicitly state: masking in logs, encryption at rest (KMS / ADE), encryption in transit, and audit trail. Missing this AC is a compliance risk and a common interview trap — it signals whether you understand the enterprise context."
+          }
+        ]
+      }
+    ]
   }
 ];
